@@ -6,7 +6,7 @@ ConsoleDisplay<int> console = new ConsoleDisplay<int>(40, 40, new Dictionary<int
     { 1, '#' }
 });
 
-GOLAutomaton GOL = new GOLAutomaton(40, 40);
+GOLAutomaton GOL = new GOLAutomaton(40, 40, new RandomNoiseGen());
 
 while (true)
 {

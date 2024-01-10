@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TEST.Interfaces;
 
 namespace TEST
 {
@@ -14,18 +15,17 @@ namespace TEST
         public int[,] grid;
         int[,] prevState;
 
-        public GOLAutomaton(int width, int height)
+        public GOLAutomaton(int width, int height, IGridStateGenerator startGenerator)
         {
             grid = new int[width, height];
             this.width = width;
             this.height = height;
 
-            for (int y = 0; y < height; y++)
+            grid = startGenerator.Generate(width, height);
+
+            if (grid.GetLongLength(0) != width || grid.GetLongLength(1) != height)
             {
-                for (int x = 0; x < width; x++)
-                {
-                    grid[x, y] = new Random().Next() % 2;
-                }
+                throw new Exception("Error with grid size");
             }
         }
 
