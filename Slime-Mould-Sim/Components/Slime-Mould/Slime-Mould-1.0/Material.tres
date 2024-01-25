@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dqblhqh83inou"]
+
+[ext_resource type="Shader" path="res://Components/Slime-Mould/Slime-Mould-1.0/Shader.gdshader" id="1_3heqi"]
+
+[resource]
+shader = ExtResource("1_3heqi")

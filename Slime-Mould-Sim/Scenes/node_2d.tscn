@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c22quf7kpqw7a"]
+
+[ext_resource type="PackedScene" uid="uid://c4no31pcaap8v" path="res://Components/Slime-Mould/Slime-Mould-Env.tscn" id="1_aljlk"]
+[ext_resource type="Script" path="res://Scripts/ShaderRenderer.cs" id="2_ybcjj"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Sprite2D" parent="." instance=ExtResource("1_aljlk")]
+script = ExtResource("2_ybcjj")

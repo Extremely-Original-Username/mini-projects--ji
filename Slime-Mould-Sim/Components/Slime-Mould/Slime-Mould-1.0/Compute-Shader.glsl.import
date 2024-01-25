@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cm0cmptvwgweo"
+path="res://.godot/imported/Compute-Shader.glsl-edfe1b094361f0833eb1fb1d2c41dad9.res"
+
+[deps]
+
+source_file="res://Components/Slime-Mould/Slime-Mould-1.0/Compute-Shader.glsl"
+dest_files=["res://.godot/imported/Compute-Shader.glsl-edfe1b094361f0833eb1fb1d2c41dad9.res"]
+
+[params]
+
