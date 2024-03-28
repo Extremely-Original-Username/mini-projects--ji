@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutomataVideoGenerator.Automatons
+namespace AutomataVideoGenerator.Automatons.Standard
 {
-    public class Bugs : BaseAutomaton
+    public class GameOfLife : BaseAutomaton
     {
         private Color liveColor;
         private Color deadColor;
-        public Bugs(int width, int height, Color? liveColor = null, Color? deadColor = null) : base(width, height)
+        public GameOfLife(int width, int height, Color? liveColor = null, Color? deadColor = null) : base(width, height)
         {
-            if(liveColor != null)
+            if (liveColor != null)
             {
                 this.liveColor = (Color)liveColor;
             }
@@ -35,7 +35,7 @@ namespace AutomataVideoGenerator.Automatons
             {
                 for (int y = 0; y < height; y++)
                 {
-                    bitmap.SetPixel(x, y, colors[(new Random().Next()) % 2]);
+                    bitmap.SetPixel(x, y, colors[new Random().Next() % 2]);
                 }
             }
         }
@@ -52,17 +52,23 @@ namespace AutomataVideoGenerator.Automatons
                 {
                     int neighbors = getNeighbors(x, y, prevState);
 
-                    if (neighbors >= 0 && neighbors <= 33)
+                    if (prevState.GetPixel(x, y).ToArgb() == liveColor.ToArgb())
                     {
-                        bitmap.SetPixel(x, y, deadColor);
+                        if (neighbors < 2)
+                        {
+                            bitmap.SetPixel(x, y, deadColor);
+                        }
+                        if (neighbors > 3)
+                        {
+                            bitmap.SetPixel(x, y, deadColor);
+                        }
                     }
-                    if (neighbors >= 34 && neighbors <= 45)
+                    if (prevState.GetPixel(x, y).ToArgb() == deadColor.ToArgb())
                     {
-                        bitmap.SetPixel(x, y, liveColor);
-                    }
-                    if (neighbors >= 58 && neighbors <= 121)
-                    {
-                        bitmap.SetPixel(x, y, deadColor);
+                        if (neighbors == 3)
+                        {
+                            bitmap.SetPixel(x, y, liveColor);
+                        }
                     }
                 }
             }
@@ -72,14 +78,14 @@ namespace AutomataVideoGenerator.Automatons
         {
             int total = 0;
             for (
-                int y = Math.Max(Y - 5, 0);
-                y <= Math.Min(Y + 5, state.Height - 1);
+                int y = Math.Max(Y - 1, 0);
+                y <= Math.Min(Y + 1, state.Height - 1);
                 y++
                 )
             {
                 for (
-                    int x = Math.Max(X - 5, 0);
-                    x <= Math.Min(X + 5, state.Width - 1);
+                    int x = Math.Max(X - 1, 0);
+                    x <= Math.Min(X + 1, state.Width - 1);
                     x++
                     )
                 {
