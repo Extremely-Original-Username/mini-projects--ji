@@ -33,18 +33,6 @@ namespace AutomataVideoGenerator.Automatons.Standard
             GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new
                 NeighborCount(neighborGrid, texture, live, dead));
 
-            var arr = neighborGrid.ToArray();
-            for (int y = 0; y < texture.Height; y++)
-            {
-                for (int x = 0; x < texture.Width; x++)
-                {
-                    Console.WriteLine(x + ", " + y + ":  " + arr[x, y]);
-                }
-            }
-
-            Thread.Sleep(10000);
-
-
             GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new 
                 Step(texture, neighborGrid, live, dead));
         }
@@ -59,8 +47,7 @@ namespace AutomataVideoGenerator.Automatons.Standard
 
             public void Execute()
             {
-                buffer[ThreadIds.XY] = live;
-                //buffer[ThreadIds.XY] = (ThreadIds.X + (seed % ThreadIds.Y) + ThreadIds.Y + (seed % ThreadIds.X)) % 2 == 0 ? live : dead;
+                buffer[ThreadIds.XY] = ((ThreadIds.X * seed + ThreadIds.Y * seed * 10000) << 2) % 2 == 0 ? live : dead;
             }
         }
 
