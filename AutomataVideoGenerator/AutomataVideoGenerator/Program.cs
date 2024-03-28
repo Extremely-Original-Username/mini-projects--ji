@@ -4,7 +4,7 @@ using System.Drawing;
 
 //runAutomaton(new GameOfLife(100, 100), 100, "GOLResults");
 
-runGPUAutomaton(new BoostedBugs(100, 100), 50, "BoostedBUGSResults");
+runGPUAutomaton(new BoostedBugs(5, 5), 50, "BoostedBUGSResults");
 runAutomaton(new Bugs(100, 100), 50, "BUGSResults");
 
 static void runAutomaton(BaseAutomaton automaton, int cycles, string savePath = "results")
@@ -28,7 +28,7 @@ static void runGPUAutomaton(BaseGpuAutomaton automaton, int cycles, string saveP
     {
         Console.Clear();
         Console.WriteLine("Processing: " + i);
-        automaton.getImage(1).Save(savePath + "/" + i + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+        automaton.getImage(100).Save(savePath + "/" + i + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
         automaton.update();
     }
 }

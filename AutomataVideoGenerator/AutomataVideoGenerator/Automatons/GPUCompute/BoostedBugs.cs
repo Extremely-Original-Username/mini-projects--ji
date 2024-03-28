@@ -12,31 +12,18 @@ namespace AutomataVideoGenerator.Automatons.Standard
 {
     public partial class BoostedBugs : BaseGpuAutomaton
     {
-        private Color liveColor;
-        private Color deadColor;
-        public BoostedBugs(int width, int height, Color? liveColor = null, Color? deadColor = null) : base(width, height)
-        {
-            if (liveColor != null)
-            {
-                this.liveColor = (Color)liveColor;
-            }
-            else
-            {
-                this.liveColor = Color.White;
-            }
-            if (deadColor != null)
-            {
-                this.deadColor = (Color)deadColor;
-            }
-            else
-            {
-                this.deadColor = Color.Black;
-            }
+        private int width;
+        private int height;
 
+        private int live = 1;
+        private int dead = 0;
+
+        public BoostedBugs(int width, int height) : base(width, height)
+        {
             int seed = DateTime.Now.GetHashCode();
 
             GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new 
-                Randomise(texture, seed, colorToFloat4(this.liveColor), colorToFloat4(this.deadColor)));
+                Randomise(texture, seed, live, dead));
         }
 
         public override void update()
@@ -44,23 +31,35 @@ namespace AutomataVideoGenerator.Automatons.Standard
             ReadWriteTexture2D<int> neighborGrid = GraphicsDevice.GetDefault().AllocateReadWriteTexture2D<int>(texture.Width, texture.Height);
 
             GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new
-                NeighborCount(neighborGrid, texture, colorToFloat4(liveColor), colorToFloat4(deadColor)));
+                NeighborCount(neighborGrid, texture, live, dead));
+
+            var arr = neighborGrid.ToArray();
+            for (int y = 0; y < texture.Height; y++)
+            {
+                for (int x = 0; x < texture.Width; x++)
+                {
+                    Console.WriteLine(x + ", " + y + ":  " + arr[x, y]);
+                }
+            }
+
+            Thread.Sleep(10000);
+
 
             GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new 
-                Step(texture, neighborGrid, colorToFloat4(liveColor), colorToFloat4(deadColor)));
+                Step(texture, neighborGrid, live, dead));
         }
 
         [AutoConstructor]
         public readonly partial struct Randomise : IComputeShader
         {
-            public readonly ReadWriteTexture2D<Bgra32, Float4> buffer;
+            public readonly ReadWriteTexture2D<int> buffer;
             public readonly int seed;
-            public readonly float4 liveColor;
-            public readonly float4 deadColor;
+            public readonly int live;
+            public readonly int dead;
 
             public void Execute()
             {
-                buffer[ThreadIds.XY] = (ThreadIds.X + (seed % ThreadIds.Y) + ThreadIds.Y + (seed % ThreadIds.X)) % 2 == 0 ? liveColor : deadColor;
+                buffer[ThreadIds.XY] = (ThreadIds.X + (seed % ThreadIds.Y) + ThreadIds.Y + (seed % ThreadIds.X)) % 2 == 0 ? live : dead;
             }
         }
 
@@ -68,9 +67,9 @@ namespace AutomataVideoGenerator.Automatons.Standard
         public readonly partial struct NeighborCount : IComputeShader
         {
             public readonly ReadWriteTexture2D<int> buffer;
-            public readonly ReadWriteTexture2D<Bgra32, Float4> neighborhood;
-            public readonly float4 liveColor;
-            public readonly float4 deadColor;
+            public readonly ReadWriteTexture2D<int> neighborhood;
+            public readonly int live;
+            public readonly int dead;
 
             public void Execute()
             {
@@ -90,15 +89,7 @@ namespace AutomataVideoGenerator.Automatons.Standard
                         x++
                         )
                     {
-                        Float4 current = neighborhood[ThreadIds.XY].BGRA;
-                        Float4 live = liveColor.BGRA;
-                        //if (neighborhood[ThreadIds.XY].BGRA.Equals(liveColor))
-                        if (
-                            current.W == live.W &&
-                            current.X == live.X &&
-                            current.Y == live.Y && 
-                            current.Z == live.Z
-                            )
+                        if (neighborhood[ThreadIds.XY] == live)
                         {
                             total++;
                         }
@@ -111,10 +102,10 @@ namespace AutomataVideoGenerator.Automatons.Standard
         [AutoConstructor]
         public readonly partial struct Step : IComputeShader
         {
-            public readonly ReadWriteTexture2D<Bgra32, Float4> buffer;
+            public readonly ReadWriteTexture2D<int> buffer;
             public readonly ReadWriteTexture2D<int> neighborCount;
-            public readonly float4 liveColor;
-            public readonly float4 deadColor;
+            public readonly int live;
+            public readonly int dead;
 
             public void Execute()
             {
@@ -122,15 +113,15 @@ namespace AutomataVideoGenerator.Automatons.Standard
 
                 if (neighbors >= 0 && neighbors <= 33)
                 {
-                    buffer[ThreadIds.XY] = deadColor;
+                    buffer[ThreadIds.XY] = dead;
                 }
                 if (neighbors >= 34 && neighbors <= 45)
                 {
-                    buffer[ThreadIds.XY] = liveColor;
+                    buffer[ThreadIds.XY] = live;
                 }
                 if (neighbors >= 58 && neighbors <= 121)
                 {
-                    buffer[ThreadIds.XY] = deadColor;
+                    buffer[ThreadIds.XY] = dead;
                 }
             }
         }
