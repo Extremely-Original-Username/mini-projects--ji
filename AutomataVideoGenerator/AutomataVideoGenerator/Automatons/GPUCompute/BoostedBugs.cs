@@ -59,7 +59,8 @@ namespace AutomataVideoGenerator.Automatons.Standard
 
             public void Execute()
             {
-                buffer[ThreadIds.XY] = (ThreadIds.X + (seed % ThreadIds.Y) + ThreadIds.Y + (seed % ThreadIds.X)) % 2 == 0 ? live : dead;
+                buffer[ThreadIds.XY] = live;
+                //buffer[ThreadIds.XY] = (ThreadIds.X + (seed % ThreadIds.Y) + ThreadIds.Y + (seed % ThreadIds.X)) % 2 == 0 ? live : dead;
             }
         }
 
@@ -78,23 +79,25 @@ namespace AutomataVideoGenerator.Automatons.Standard
 
                 int total = 0;
                 for (
-                    int y = Math.Max(Y - 5, 0);
-                    y <= Math.Min(Y + 5, neighborhood.Height - 1);
-                    y++
-                    )
+                    int y = Hlsl.Max(0, Y - 1); 
+                    y <= Hlsl.Min(neighborhood.Height - 1, Y + 1); 
+                    y++)
                 {
                     for (
-                        int x = Math.Max(X - 5, 0);
-                        x <= Math.Min(X + 5, neighborhood.Width - 1);
-                        x++
-                        )
+                        int x = Hlsl.Max(0, X - 1);
+                        x <= Hlsl.Min(neighborhood.Width - 1, X + 1);
+                        x++)
                     {
-                        if (neighborhood[ThreadIds.XY] == live)
+                        if (
+                            (x != X || y != Y) &&
+                            neighborhood[X, Y] == 1
+                            )
                         {
                             total++;
                         }
                     }
                 }
+
                 buffer[ThreadIds.XY] = total;
             }
         }

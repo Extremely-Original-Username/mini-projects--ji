@@ -4,7 +4,7 @@ using System.Drawing;
 
 //runAutomaton(new GameOfLife(100, 100), 100, "GOLResults");
 
-runGPUAutomaton(new BoostedBugs(5, 5), 50, "BoostedBUGSResults");
+runGPUAutomaton(new BoostedBugs(6, 6), 50, "BoostedBUGSResults");
 runAutomaton(new Bugs(100, 100), 50, "BUGSResults");
 
 static void runAutomaton(BaseAutomaton automaton, int cycles, string savePath = "results")
