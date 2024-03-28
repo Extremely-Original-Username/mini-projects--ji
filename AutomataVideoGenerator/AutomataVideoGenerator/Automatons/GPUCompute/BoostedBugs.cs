@@ -78,19 +78,19 @@ namespace AutomataVideoGenerator.Automatons.Standard
                 int Y = ThreadIds.Y;
 
                 int total = 0;
-                for (
+                for ( //For Y that is not out of bounds
                     int y = Hlsl.Max(0, Y - 1); 
                     y <= Hlsl.Min(neighborhood.Height - 1, Y + 1); 
                     y++)
                 {
-                    for (
+                    for ( //For X that is not out of bounds
                         int x = Hlsl.Max(0, X - 1);
                         x <= Hlsl.Min(neighborhood.Width - 1, X + 1);
                         x++)
                     {
                         if (
-                            (x != X || y != Y) &&
-                            neighborhood[X, Y] == 1
+                            (x != X || y != Y) && //If not the current cell
+                            neighborhood[X, Y] == 1 //And cell is alive
                             )
                         {
                             total++;
