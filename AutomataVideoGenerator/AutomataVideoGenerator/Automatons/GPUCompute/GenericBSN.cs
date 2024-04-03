@@ -1,5 +1,4 @@
-﻿using AutomataVideoGenerator.Automatons.Standard;
-using ComputeSharp;
+﻿using ComputeSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
