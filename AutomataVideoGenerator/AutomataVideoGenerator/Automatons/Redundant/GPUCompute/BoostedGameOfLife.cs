@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TerraFX.Interop.Windows;
+using AutomataVideoGenerator.Automatons.GPUCompute;
 
-namespace AutomataVideoGenerator.Automatons.Standard
+namespace AutomataVideoGenerator.Automatons.Redundant.GPUCompute
 {
     public partial class BoostedGameOfLife : BaseGpuAutomaton
     {

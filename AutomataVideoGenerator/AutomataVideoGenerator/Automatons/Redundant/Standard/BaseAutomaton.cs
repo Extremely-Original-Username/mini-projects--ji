@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutomataVideoGenerator.Automatons.Standard
+namespace AutomataVideoGenerator.Automatons.Redundant.Standard
 {
     public abstract class BaseAutomaton : iAutomaton
     {

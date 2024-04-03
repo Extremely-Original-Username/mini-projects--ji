@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ComputeSharp;
 
-namespace AutomataVideoGenerator.Automatons.Standard
+namespace AutomataVideoGenerator.Automatons.GPUCompute
 {
     public abstract partial class BaseGpuAutomaton : iAutomaton
     {

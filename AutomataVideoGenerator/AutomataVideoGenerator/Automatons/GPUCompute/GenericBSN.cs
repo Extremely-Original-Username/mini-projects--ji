@@ -30,7 +30,7 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
         private static Dictionary<defaults, SBNRuleSet> defaultsRuleSets = new Dictionary<defaults, SBNRuleSet>()
         {
             { defaults.GameOfLife, new SBNRuleSet(1, "B3/S23") },
-            { defaults.Bugs, new SBNRuleSet(5, "34,45,34,45") },
+            { defaults.Bugs, new SBNRuleSet(5, "33,45,33,58") },
         };
 
 
