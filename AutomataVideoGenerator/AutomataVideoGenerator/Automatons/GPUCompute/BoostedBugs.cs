@@ -96,7 +96,7 @@ namespace AutomataVideoGenerator.Automatons.Standard
                     {
                         if (
                             (x != X || y != Y) && //If not the current cell
-                            neighborhood[X, Y] == 1 //And cell is alive
+                            neighborhood[x, y] == live //And cell is alive
                             )
                         {
                             total++;
@@ -120,27 +120,27 @@ namespace AutomataVideoGenerator.Automatons.Standard
             {
                 int neighbors = neighborCount[ThreadIds.XY];
 
-                //if (neighbors >= 0 && neighbors <= 33)
-                //{
-                //    buffer[ThreadIds.XY] = dead;
-                //}
-                //if (neighbors >= 34 && neighbors <= 45)
-                //{
-                //    buffer[ThreadIds.XY] = live;
-                //}
-                //if (neighbors >= 58 && neighbors <= 121)
-                //{
-                //    buffer[ThreadIds.XY] = dead;
-                //}
-
-                if (buffer[ThreadIds.XY] == dead)
-                {
-                    buffer[ThreadIds.XY] = live;
-                }
-                else if (buffer[ThreadIds.XY] == live)
+                if (neighbors >= 0 && neighbors <= 33)
                 {
                     buffer[ThreadIds.XY] = dead;
                 }
+                if (neighbors >= 34 && neighbors <= 45)
+                {
+                    buffer[ThreadIds.XY] = live;
+                }
+                if (neighbors >= 58 && neighbors <= 121)
+                {
+                    buffer[ThreadIds.XY] = dead;
+                }
+
+                //if (buffer[ThreadIds.XY] == dead)
+                //{
+                //    buffer[ThreadIds.XY] = live;
+                //}
+                //else if (buffer[ThreadIds.XY] == live)
+                //{
+                //    buffer[ThreadIds.XY] = dead;
+                //}
             }
         }
     }
