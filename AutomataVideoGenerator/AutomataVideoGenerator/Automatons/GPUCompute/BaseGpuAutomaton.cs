@@ -61,7 +61,7 @@ namespace AutomataVideoGenerator.Automatons.Standard
 
         public abstract void update();
 
-        public void run(int cycles, string savePath)
+        public void run(int cycles, string savePath, int scale)
         {
             Directory.CreateDirectory(savePath);
 
@@ -69,9 +69,13 @@ namespace AutomataVideoGenerator.Automatons.Standard
             {
                 Console.SetCursorPosition(0, 0);
                 Console.WriteLine("Processing: " + i + "                  ");
-                getImage(1).Save(savePath + "/" + i + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                getImage(scale).Save(savePath + "/" + i + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
                 update();
             }
+        }
+        public void run(int cycles, string savePath)
+        {
+            run(cycles, savePath, 1);
         }
 
         public void setRandom()

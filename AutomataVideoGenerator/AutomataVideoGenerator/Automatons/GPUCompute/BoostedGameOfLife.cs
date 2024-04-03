@@ -10,12 +10,12 @@ using TerraFX.Interop.Windows;
 
 namespace AutomataVideoGenerator.Automatons.Standard
 {
-    public partial class BoostedBugs : BaseGpuAutomaton
+    public partial class BoostedGameOfLife : BaseGpuAutomaton
     {
         private int live = 1;
         private int dead = 0;
 
-        public BoostedBugs(int width, int height) : base(width, height)
+        public BoostedGameOfLife(int width, int height) : base(width, height)
         {
             setRandom();
         }
@@ -46,13 +46,13 @@ namespace AutomataVideoGenerator.Automatons.Standard
 
                 int total = 0;
                 for ( //For Y that is not out of bounds
-                    int y = Hlsl.Max(0, Y - 5); 
-                    y <= Hlsl.Min(neighborhood.Height - 1, Y + 5); 
+                    int y = Hlsl.Max(0, Y - 1); 
+                    y <= Hlsl.Min(neighborhood.Height - 1, Y + 1); 
                     y++)
                 {
                     for ( //For X that is not out of bounds
-                        int x = Hlsl.Max(0, X - 5);
-                        x <= Hlsl.Min(neighborhood.Width - 1, X + 5);
+                        int x = Hlsl.Max(0, X - 1);
+                        x <= Hlsl.Min(neighborhood.Width - 1, X + 1);
                         x++)
                     {
                         if (
@@ -81,17 +81,23 @@ namespace AutomataVideoGenerator.Automatons.Standard
             {
                 int neighbors = neighborCount[ThreadIds.XY];
 
-                if (neighbors >= 0 && neighbors <= 33)
+                if (buffer[ThreadIds.XY] == live)
                 {
-                    buffer[ThreadIds.XY] = dead;
+                    if (neighbors < 2)
+                    {
+                        buffer[ThreadIds.XY] = dead;
+                    }
+                    if (neighbors > 3)
+                    {
+                        buffer[ThreadIds.XY] = dead;
+                    }
                 }
-                if (neighbors >= 34 && neighbors <= 45)
+                else
                 {
-                    buffer[ThreadIds.XY] = live;
-                }
-                if (neighbors >= 58 && neighbors <= 121)
-                {
-                    buffer[ThreadIds.XY] = dead;
+                    if (neighbors == 3)
+                    {
+                        buffer[ThreadIds.XY] = live;
+                    }
                 }
             }
         }
