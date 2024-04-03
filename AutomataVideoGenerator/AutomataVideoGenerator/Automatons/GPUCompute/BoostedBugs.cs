@@ -12,29 +12,12 @@ namespace AutomataVideoGenerator.Automatons.Standard
 {
     public partial class BoostedBugs : BaseGpuAutomaton
     {
-        private int width;
-        private int height;
-
         private int live = 1;
         private int dead = 0;
 
         public BoostedBugs(int width, int height) : base(width, height)
         {
-            int[,] startingMap = new int[width,height];
-
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    startingMap[x, y] = new Random().Next() % 2;
-                    //startingMap[x, y] = 1;
-                }
-            }
-
-            var initial = GraphicsDevice.GetDefault().AllocateReadWriteTexture2D<int>(startingMap);
-
-            GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new 
-                Set(texture, initial));
+            setRandom();
         }
 
         public override void update()
@@ -44,30 +27,8 @@ namespace AutomataVideoGenerator.Automatons.Standard
             GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new
                 NeighborCount(neighborGrid, texture, live, dead));
 
-            //var arr = neighborGrid.ToArray();
-            //for (int y = 0; y < neighborGrid.Height; y++)
-            //{
-            //    for (int x = 0; x < neighborGrid.Width; x++)
-            //    {
-            //        Console.WriteLine(x + ", " + y + ":  " + arr[x, y]);
-            //    }
-            //}
-            //Thread.Sleep(10000);
-
             GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new 
                 Step(texture, neighborGrid, live, dead));
-        }
-
-        [AutoConstructor]
-        public readonly partial struct Set : IComputeShader
-        {
-            public readonly ReadWriteTexture2D<int> buffer;
-            public readonly ReadWriteTexture2D<int> source;
-
-            public void Execute()
-            {
-                buffer[ThreadIds.XY] = source[ThreadIds.XY];
-            }
         }
 
         [AutoConstructor]

@@ -10,7 +10,7 @@ using ComputeSharp;
 
 namespace AutomataVideoGenerator.Automatons.Standard
 {
-    public abstract class BaseGpuAutomaton : iAutomaton
+    public abstract partial class BaseGpuAutomaton : iAutomaton
     {
         protected ReadWriteTexture2D<int> texture;
 
@@ -71,6 +71,39 @@ namespace AutomataVideoGenerator.Automatons.Standard
                 Console.WriteLine("Processing: " + i + "                  ");
                 getImage(1).Save(savePath + "/" + i + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
                 update();
+            }
+        }
+
+        public void setRandom()
+        {
+            int width = texture.Width;
+            int height = texture.Height;
+
+            int[,] startingMap = new int[width, height];
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    startingMap[x, y] = new Random().Next() % 2;
+                }
+            }
+
+            var initial = GraphicsDevice.GetDefault().AllocateReadWriteTexture2D<int>(startingMap);
+
+            GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new
+                Set(texture, initial));
+        }
+
+        [AutoConstructor]
+        public readonly partial struct Set : IComputeShader
+        {
+            public readonly ReadWriteTexture2D<int> buffer;
+            public readonly ReadWriteTexture2D<int> source;
+
+            public void Execute()
+            {
+                buffer[ThreadIds.XY] = source[ThreadIds.XY];
             }
         }
     }
