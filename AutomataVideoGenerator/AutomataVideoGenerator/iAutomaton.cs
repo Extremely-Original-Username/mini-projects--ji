@@ -11,5 +11,6 @@ namespace AutomataVideoGenerator
     {
         public Bitmap getImage();
         public void update();
+        public void run(int cycles, string savePath);
     }
 }

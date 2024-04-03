@@ -39,5 +39,18 @@ namespace AutomataVideoGenerator.Automatons.Standard
         }
 
         public abstract void update();
+
+        public void run(int cycles, string savePath)
+        {
+            Directory.CreateDirectory(savePath);
+
+            for (int i = 0; i < cycles; i++)
+            {
+                Console.SetCursorPosition(0, 0);
+                Console.WriteLine("Processing: " + i + "                  ");
+                getImage(1).Save(savePath + "/" + i + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                update();
+            }
+        }
     }
 }
