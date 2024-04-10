@@ -30,9 +30,13 @@
         {
             DisplayImageBox = new PictureBox();
             ToolPanel = new Panel();
+            panel1 = new Panel();
+            ModelLabel = new Label();
+            ModelListBox = new ComboBox();
             StartStopButton = new Button();
             ((System.ComponentModel.ISupportInitialize)DisplayImageBox).BeginInit();
             ToolPanel.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // DisplayImageBox
@@ -48,6 +52,7 @@
             // ToolPanel
             // 
             ToolPanel.BackColor = SystemColors.ControlLight;
+            ToolPanel.Controls.Add(panel1);
             ToolPanel.Controls.Add(StartStopButton);
             ToolPanel.Dock = DockStyle.Right;
             ToolPanel.Location = new Point(538, 0);
@@ -55,6 +60,34 @@
             ToolPanel.Name = "ToolPanel";
             ToolPanel.Size = new Size(340, 544);
             ToolPanel.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(ModelLabel);
+            panel1.Controls.Add(ModelListBox);
+            panel1.Location = new Point(3, 12);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(334, 41);
+            panel1.TabIndex = 3;
+            // 
+            // ModelLabel
+            // 
+            ModelLabel.AutoSize = true;
+            ModelLabel.Location = new Point(3, 8);
+            ModelLabel.Name = "ModelLabel";
+            ModelLabel.Size = new Size(67, 25);
+            ModelLabel.TabIndex = 1;
+            ModelLabel.Text = "Model:";
+            // 
+            // ModelListBox
+            // 
+            ModelListBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            ModelListBox.FormattingEnabled = true;
+            ModelListBox.Location = new Point(76, 5);
+            ModelListBox.Name = "ModelListBox";
+            ModelListBox.Size = new Size(249, 33);
+            ModelListBox.TabIndex = 0;
+            ModelListBox.SelectedIndexChanged += ModelListBox_SelectedIndexChanged;
             // 
             // StartStopButton
             // 
@@ -79,6 +112,8 @@
             Text = "MainForm";
             ((System.ComponentModel.ISupportInitialize)DisplayImageBox).EndInit();
             ToolPanel.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -87,5 +122,8 @@
         private PictureBox DisplayImageBox;
         private Panel ToolPanel;
         private Button StartStopButton;
+        private Panel panel1;
+        private Label ModelLabel;
+        private ComboBox ModelListBox;
     }
 }

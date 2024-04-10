@@ -20,13 +20,13 @@ namespace AutomatonGen_UI
         public MainForm()
         {
             automaton = new GenericBSN(40, 40, GenericBSN.defaults.GameOfLife);
+            timer = new System.Windows.Forms.Timer();
+            timer.Tick += new EventHandler(update);
 
             InitializeComponent();
 
+            ModelListBox.DataSource = Enum.GetNames(typeof(GenericBSN.defaults)).ToList();
             reDrawMainImage();
-
-            timer = new System.Windows.Forms.Timer();
-            timer.Tick += new EventHandler(update);
         }
 
         private void update(object sender, EventArgs e)
@@ -41,9 +41,12 @@ namespace AutomatonGen_UI
             DisplayImageBox.Image = image;
         }
 
-        private void DisplayImageBox_Click(object sender, EventArgs e)
+        private void resetAutomaton()
         {
+            timer.Stop();
 
+            automaton = new GenericBSN(100, 100, (GenericBSN.defaults)ModelListBox.SelectedIndex); //Cast enmum from int
+            reDrawMainImage();
         }
 
         private void StartStopButton_Click(object sender, EventArgs e)
@@ -57,6 +60,11 @@ namespace AutomatonGen_UI
             {
                 timer.Stop();
             }
+        }
+
+        private void ModelListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            resetAutomaton();
         }
     }
 }
