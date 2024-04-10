@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automatons", "Automatons\Au
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomatonGen_Console", "AutomatonGen_Console\AutomatonGen_Console.csproj", "{7ECC272D-D1C7-4F40-80BD-BF32B0DBD24A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomatonGen_UI", "AutomatonGen_UI\AutomatonGen_UI.csproj", "{73851AC2-3EE1-4EB6-AB48-44C6665978E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7ECC272D-D1C7-4F40-80BD-BF32B0DBD24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ECC272D-D1C7-4F40-80BD-BF32B0DBD24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7ECC272D-D1C7-4F40-80BD-BF32B0DBD24A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73851AC2-3EE1-4EB6-AB48-44C6665978E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73851AC2-3EE1-4EB6-AB48-44C6665978E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73851AC2-3EE1-4EB6-AB48-44C6665978E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73851AC2-3EE1-4EB6-AB48-44C6665978E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
