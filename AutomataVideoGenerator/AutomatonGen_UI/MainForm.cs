@@ -15,6 +15,8 @@ namespace AutomatonGen_UI
     {
         GenericBSN automaton;
         Bitmap image;
+        System.Windows.Forms.Timer timer;
+
         public MainForm()
         {
             automaton = new GenericBSN(40, 40, GenericBSN.defaults.GameOfLife);
@@ -23,11 +25,8 @@ namespace AutomatonGen_UI
 
             reDrawMainImage();
 
-            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-            timer.Interval = 100;
+            timer = new System.Windows.Forms.Timer();
             timer.Tick += new EventHandler(update);
-            timer.Start();
-
         }
 
         private void update(object sender, EventArgs e)
@@ -45,6 +44,19 @@ namespace AutomatonGen_UI
         private void DisplayImageBox_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void StartStopButton_Click(object sender, EventArgs e)
+        {
+            if (!timer.Enabled)
+            {
+                timer.Interval = 100;
+                timer.Start();
+            }
+            else
+            {
+                timer.Stop();
+            }
         }
     }
 }
