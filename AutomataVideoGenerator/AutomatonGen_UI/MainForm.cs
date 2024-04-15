@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace AutomatonGen_UI
 {
@@ -45,7 +46,7 @@ namespace AutomatonGen_UI
         {
             timer.Stop();
 
-            automaton = new GenericBSN(100, 100, (GenericBSN.defaults)ModelListBox.SelectedIndex); //Cast enmum from int
+            automaton = new GenericBSN(int.Parse(WidthControl.Value.ToString()), int.Parse(HeightControl.Value.ToString()), (GenericBSN.defaults)ModelListBox.SelectedIndex); //Cast enmum from int
             reDrawMainImage();
         }
 
@@ -63,6 +64,16 @@ namespace AutomatonGen_UI
         }
 
         private void ModelListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            resetAutomaton();
+        }
+
+        private void WidthControl_ValueChanged(object sender, EventArgs e)
+        {
+            resetAutomaton();
+        }
+
+        private void HeightControl_ValueChanged(object sender, EventArgs e)
         {
             resetAutomaton();
         }

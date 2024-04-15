@@ -30,13 +30,23 @@
         {
             DisplayImageBox = new PictureBox();
             ToolPanel = new Panel();
-            panel1 = new Panel();
+            HeightPanel = new Panel();
+            HeightControl = new NumericUpDown();
+            HeightLabel = new Label();
+            WidthPanel = new Panel();
+            WidthControl = new NumericUpDown();
+            WidthLabel = new Label();
+            ModelPanel = new Panel();
             ModelLabel = new Label();
             ModelListBox = new ComboBox();
             StartStopButton = new Button();
             ((System.ComponentModel.ISupportInitialize)DisplayImageBox).BeginInit();
             ToolPanel.SuspendLayout();
-            panel1.SuspendLayout();
+            HeightPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)HeightControl).BeginInit();
+            WidthPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)WidthControl).BeginInit();
+            ModelPanel.SuspendLayout();
             SuspendLayout();
             // 
             // DisplayImageBox
@@ -52,7 +62,9 @@
             // ToolPanel
             // 
             ToolPanel.BackColor = SystemColors.ControlLight;
-            ToolPanel.Controls.Add(panel1);
+            ToolPanel.Controls.Add(HeightPanel);
+            ToolPanel.Controls.Add(WidthPanel);
+            ToolPanel.Controls.Add(ModelPanel);
             ToolPanel.Controls.Add(StartStopButton);
             ToolPanel.Dock = DockStyle.Right;
             ToolPanel.Location = new Point(538, 0);
@@ -61,14 +73,70 @@
             ToolPanel.Size = new Size(340, 544);
             ToolPanel.TabIndex = 1;
             // 
-            // panel1
+            // HeightPanel
             // 
-            panel1.Controls.Add(ModelLabel);
-            panel1.Controls.Add(ModelListBox);
-            panel1.Location = new Point(3, 12);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(334, 41);
-            panel1.TabIndex = 3;
+            HeightPanel.Controls.Add(HeightControl);
+            HeightPanel.Controls.Add(HeightLabel);
+            HeightPanel.Location = new Point(178, 59);
+            HeightPanel.Name = "HeightPanel";
+            HeightPanel.Size = new Size(159, 41);
+            HeightPanel.TabIndex = 5;
+            // 
+            // HeightControl
+            // 
+            HeightControl.Location = new Point(68, 6);
+            HeightControl.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            HeightControl.Name = "HeightControl";
+            HeightControl.Size = new Size(88, 31);
+            HeightControl.TabIndex = 2;
+            HeightControl.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            HeightControl.ValueChanged += HeightControl_ValueChanged;
+            // 
+            // HeightLabel
+            // 
+            HeightLabel.AutoSize = true;
+            HeightLabel.Location = new Point(3, 8);
+            HeightLabel.Name = "HeightLabel";
+            HeightLabel.Size = new Size(69, 25);
+            HeightLabel.TabIndex = 1;
+            HeightLabel.Text = "Height:";
+            // 
+            // WidthPanel
+            // 
+            WidthPanel.Controls.Add(WidthControl);
+            WidthPanel.Controls.Add(WidthLabel);
+            WidthPanel.Location = new Point(6, 59);
+            WidthPanel.Name = "WidthPanel";
+            WidthPanel.Size = new Size(159, 41);
+            WidthPanel.TabIndex = 4;
+            // 
+            // WidthControl
+            // 
+            WidthControl.Location = new Point(62, 6);
+            WidthControl.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            WidthControl.Name = "WidthControl";
+            WidthControl.Size = new Size(88, 31);
+            WidthControl.TabIndex = 2;
+            WidthControl.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            WidthControl.ValueChanged += WidthControl_ValueChanged;
+            // 
+            // WidthLabel
+            // 
+            WidthLabel.AutoSize = true;
+            WidthLabel.Location = new Point(3, 8);
+            WidthLabel.Name = "WidthLabel";
+            WidthLabel.Size = new Size(64, 25);
+            WidthLabel.TabIndex = 1;
+            WidthLabel.Text = "Width:";
+            // 
+            // ModelPanel
+            // 
+            ModelPanel.Controls.Add(ModelLabel);
+            ModelPanel.Controls.Add(ModelListBox);
+            ModelPanel.Location = new Point(3, 12);
+            ModelPanel.Name = "ModelPanel";
+            ModelPanel.Size = new Size(334, 41);
+            ModelPanel.TabIndex = 3;
             // 
             // ModelLabel
             // 
@@ -112,8 +180,14 @@
             Text = "MainForm";
             ((System.ComponentModel.ISupportInitialize)DisplayImageBox).EndInit();
             ToolPanel.ResumeLayout(false);
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            HeightPanel.ResumeLayout(false);
+            HeightPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)HeightControl).EndInit();
+            WidthPanel.ResumeLayout(false);
+            WidthPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)WidthControl).EndInit();
+            ModelPanel.ResumeLayout(false);
+            ModelPanel.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -122,8 +196,14 @@
         private PictureBox DisplayImageBox;
         private Panel ToolPanel;
         private Button StartStopButton;
-        private Panel panel1;
+        private Panel ModelPanel;
         private Label ModelLabel;
         private ComboBox ModelListBox;
+        private Panel WidthPanel;
+        private Label WidthLabel;
+        private NumericUpDown WidthControl;
+        private Panel HeightPanel;
+        private NumericUpDown HeightControl;
+        private Label HeightLabel;
     }
 }
