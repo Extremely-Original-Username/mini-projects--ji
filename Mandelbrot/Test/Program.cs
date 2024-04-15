@@ -1,4 +1,4 @@
-﻿using Mandelbrot;
+﻿using Fractals;
 
 namespace Test
 {
@@ -6,7 +6,7 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            Mandelbrot.Mandelbrot mandelbrot = new Mandelbrot.Mandelbrot(2000, 100);
+            Mandelbrot mandelbrot = new Mandelbrot(2000, 100);
 
             mandelbrot.getImage().Save("temp.bmp");
         }

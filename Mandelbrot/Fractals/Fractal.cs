@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace Mandelbrot
+namespace Fractals
 {
     public abstract class Fractal
     {

@@ -4,27 +4,71 @@ using ComputeSharp;
 using TerraFX.Interop.Windows;
 
 
-namespace Mandelbrot
+namespace Fractals
 {
     public partial class Mandelbrot : Fractal
     {
         readonly int cutoff;
+        private PositionSet currentPosition;
 
         public Mandelbrot(int resolution, int cutoff) : base(resolution, resolution)
         {
             this.cutoff = cutoff;
 
-            Draw(-2.5f, 1.5f, -2, 2);
+            currentPosition = new PositionSet()
+            {
+                left = -2.5f,
+                right = 1.5f,
+                bottom = -2f,
+                top = 2f
+            };
+
+            Draw(currentPosition);
         }
 
-        public void Draw(float left, float right, float bottom, float top)
+        public void update()
         {
+            Draw(currentPosition);
+        }
+
+        #region position
+
+        public void step(float xMag, float yMag)
+        {
+            currentPosition.left += xMag;
+            currentPosition.right += xMag;
+
+            currentPosition.bottom += yMag;
+            currentPosition.top += yMag;
+        }
+
+        public void multiplyZoom(float factor)
+        {
+            float xMag = (currentPosition.right - currentPosition.left) / factor;
+            float yMag = (currentPosition.bottom - currentPosition.top) / factor;
+
+            currentPosition.left += xMag;
+            currentPosition.right -= xMag;
+
+            currentPosition.bottom += yMag;
+            currentPosition.top -= yMag;
+        }
+
+        #endregion
+
+        #region drawing
+
+        private void Draw(PositionSet positionSet)
+        {
+            //Create buffer
             ReadWriteTexture2D<Bgra32, float4> buffer = GraphicsDevice.GetDefault()
                 .AllocateReadWriteTexture2D<Bgra32, float4>(fractalImage.Width, fractalImage.Height);
 
+            //Run shader
             GraphicsDevice.GetDefault().For(fractalImage.Width, fractalImage.Height, new
-                DrawMandelBrot(buffer, left, right, bottom, top, cutoff, fractalImage.Width, fractalImage.Height));
+                DrawMandelBrot(buffer, positionSet.left, positionSet.right, positionSet.bottom, positionSet.top, cutoff, fractalImage.Width, fractalImage.Height));
 
+            //Save buffer result to bitmap
             Bgra32[,] result = buffer.ToArray();
 
             for (int y = 0; y < fractalImage.Height; y++)
@@ -85,6 +129,14 @@ namespace Mandelbrot
             }
         }
 
+        #endregion
 
+        private class PositionSet
+        {
+            public float left;
+            public float right;
+            public float bottom;
+            public float top;
+        }
     }
 }
