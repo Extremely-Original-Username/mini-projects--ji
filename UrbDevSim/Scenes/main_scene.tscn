@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://qly2mefaqvm0"]
+
+[ext_resource type="Texture2D" uid="uid://sytalgr3da30" path="res://icon.png" id="1_7mxny"]
+
+[node name="MainScene" type="Node2D"]
+
+[node name="WorldNode" type="Node" parent="."]
+
+[node name="LandNode" type="Sprite2D" parent="WorldNode"]
+texture = ExtResource("1_7mxny")
+
+[node name="Camera2D" type="Camera2D" parent="WorldNode"]
