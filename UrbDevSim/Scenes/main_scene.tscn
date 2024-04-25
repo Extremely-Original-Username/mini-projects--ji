@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://qly2mefaqvm0"]
+[gd_scene load_steps=3 format=3 uid="uid://qly2mefaqvm0"]
 
 [ext_resource type="Texture2D" uid="uid://sytalgr3da30" path="res://icon.png" id="1_7mxny"]
+[ext_resource type="Script" path="res://Scripts/NodeScripts/LandNode.cs" id="2_kkyai"]
 
 [node name="MainScene" type="Node2D"]
 
@@ -8,5 +9,6 @@
 
 [node name="LandNode" type="Sprite2D" parent="WorldNode"]
 texture = ExtResource("1_7mxny")
+script = ExtResource("2_kkyai")
 
 [node name="Camera2D" type="Camera2D" parent="WorldNode"]

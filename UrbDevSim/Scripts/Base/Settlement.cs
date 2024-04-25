@@ -4,7 +4,11 @@ namespace UrbDevSim.Base
 {
     public class Settlement
     {
-        private Landmass Land;
+        public Landmass Land;
 
+        public Settlement()
+        {
+            Land = new Landmass(100, 100, 10);
+        }
     }
 }
