@@ -10,21 +10,28 @@ namespace UrbDevSim.Base
 	{
 		private const int maxImageSize = 16000;
 
+		private const int scale = 4;
+		private const int noisePrecision = 5;
+
+		//0.25-1
+		private const float sharpness = 0.1f;
+		//Factor of 10
+		private const int gritReduction = 100000;
+
 		public Bitmap LandImage;
+
 		public string TEMP = "";
 
 		public Landmass(int width, int height, int resolution)
 		{
 			LandImage = new Bitmap(width * resolution, height * resolution);
 
-			var noise = new Billow();
+			var noise = new Perlin();
 			Random rand = new Random();
 
-			noise.Seed = rand.Next();
-			noise.Persistence = 0.75;
-			noise.Frequency = 1.5;
-			noise.OctaveCount = 4;
-
+			//noise.Seed = rand.Next();
+			noise.Persistence = sharpness;
+			noise.Frequency = scale;
 
 			//noise.Seed = seed;
 
@@ -34,16 +41,22 @@ namespace UrbDevSim.Base
 			{
 				for (int x = 0; x < LandImage.Width; x++)
 				{
-					double rawValue = noise.GetValue(x, y, rand.NextDouble());
+					double rawValue = Math.Clamp(Math.Round(noise.GetValue((double)x / LandImage.Width, (double)y / LandImage.Height, rand.NextDouble() / gritReduction), noisePrecision), -1, 1);
 
-					int value = Math.Abs(Convert.ToInt32(((rawValue + 1) / 2 * 255))) % 255;
+					int value = Convert.ToInt32(((double)(rawValue + 1) / 2 * 255));
 
-					if (x == 0)
+					//Regular view
+					//LandImage.SetPixel(x, y, Color.FromArgb(255, value, value, value));
+
+					//View with height lines
+					if (value % 10 > 2.5 && value % 10 < 4.5)
 					{
-						TEMP += rawValue.ToString() + ",   ";
+						LandImage.SetPixel(x, y, Color.Black);
 					}
-
-					LandImage.SetPixel(x, y, Color.FromArgb(255, value, value, value));
+					else
+					{
+						LandImage.SetPixel(x, y, Color.White);
+					}
 				}
 			}
 		}

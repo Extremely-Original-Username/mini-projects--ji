@@ -1,2 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
+.vs/
+
+temp.png
+temp.png.import
+
