@@ -2,6 +2,7 @@
 using System.Drawing;
 using ComputeSharp;
 using TerraFX.Interop.Windows;
+using System.Numerics;
 
 
 namespace Fractals
@@ -33,13 +34,16 @@ namespace Fractals
 
         #region position
 
-        public void step(float xMag, float yMag)
+        public void step(float x, float y)
         {
-            currentPosition.left += xMag;
-            currentPosition.right += xMag;
+            float xMag = (currentPosition.right - currentPosition.left);
+            float yMag = (currentPosition.top - currentPosition.bottom);
 
-            currentPosition.bottom += yMag;
-            currentPosition.top += yMag;
+            currentPosition.left += xMag * x;
+            currentPosition.right += xMag * x;
+
+            currentPosition.bottom += yMag * y;
+            currentPosition.top += yMag * y;
         }
 
         public void multiplyZoom(float factor)
