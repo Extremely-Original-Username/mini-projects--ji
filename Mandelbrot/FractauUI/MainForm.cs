@@ -18,9 +18,37 @@ namespace FractauUI
             DisplayBox.Image = mandelbrot.getImage();
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void InputBox_TextChanged(object sender, EventArgs e)
         {
+            //Compensating for strange rotation - probably a mistake somewhere.
+            if (InputBox.Text.ToUpper() == "W")
+            {
+                mandelbrot.step(-1, 0);
+            }
+            if (InputBox.Text.ToUpper() == "S")
+            {
+                mandelbrot.step(1, 0);
+            }
+            if (InputBox.Text.ToUpper() == "A")
+            {
+                mandelbrot.step(0, -1);
+            }
+            if (InputBox.Text.ToUpper() == "D")
+            {
+                mandelbrot.step(0, 1);
+            }
 
+            if (InputBox.Text.ToUpper() == "Q")
+            {
+                mandelbrot.multiplyZoom(-2f);
+            }
+            if (InputBox.Text.ToUpper() == "E")
+            {
+                mandelbrot.multiplyZoom(2);
+            }
+
+            InputBox.Clear();
+            reDraw();
         }
     }
 }

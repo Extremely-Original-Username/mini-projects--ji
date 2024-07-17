@@ -44,8 +44,8 @@ namespace Fractals
 
         public void multiplyZoom(float factor)
         {
-            float xMag = (currentPosition.right - currentPosition.left) / factor;
-            float yMag = (currentPosition.bottom - currentPosition.top) / factor;
+            float xMag = (currentPosition.right - currentPosition.left) / factor / 2;
+            float yMag = (currentPosition.top - currentPosition.bottom) / factor / 2;
 
             currentPosition.left += xMag;
             currentPosition.right -= xMag;

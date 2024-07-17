@@ -51,7 +51,7 @@
             InputBox.Name = "InputBox";
             InputBox.Size = new Size(239, 31);
             InputBox.TabIndex = 1;
-            InputBox.TextChanged += textBox1_TextChanged;
+            InputBox.TextChanged += InputBox_TextChanged;
             // 
             // InputLabel
             // 
