@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using EvoSim.Library.Geometry;
 using System;
+using System.Collections.Generic;
 
 namespace EvoSim
 {
@@ -12,7 +13,7 @@ namespace EvoSim
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private Agent testAgent;
+        private List<Agent> agents;
 
         public EvoSimGame()
         {
@@ -21,20 +22,17 @@ namespace EvoSim
             IsMouseVisible = true;
         }
 
+        #region Main
+
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            Texture2D square = Texture2D.FromFile(GraphicsDevice, "content/sprites/square.jpg");
-            testAgent = new Agent(new Transform(new Vector2Int(50, 50), new Vector2Int(10, 10)), square);
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            agents = getStartingAgents(getBaseAgentSprite());
         }
 
         protected override void Update(GameTime gameTime)
@@ -42,25 +40,16 @@ namespace EvoSim
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            testAgent.Jitter();
-
-            // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Gray);
+            GraphicsDevice.Clear(Color.DarkGray);
 
             _spriteBatch.Begin();
 
-            _spriteBatch.Draw(testAgent.Texture, 
-                new Rectangle(
-                    Convert.ToInt32(testAgent.Transform.Position.X), Convert.ToInt32(testAgent.Transform.Position.Y),
-                    Convert.ToInt32(testAgent.Transform.Size.X), Convert.ToInt32(testAgent.Transform.Size.Y)
-                    ),
-                Color.White);
+            addAgentsToSpriteBatch();
 
             _spriteBatch.End();
 
@@ -68,5 +57,41 @@ namespace EvoSim
 
             base.Draw(gameTime);
         }
+
+        #endregion
+
+        #region Helpers
+
+        private List<Agent> getStartingAgents(Texture2D sprite)
+        {
+            return new List<Agent>()
+            {
+                new Agent(new Transform(new Vector2Int(0, 0), new Vector2Int(10, 10)), sprite),
+                new Agent(new Transform(new Vector2Int(10, 10), new Vector2Int(10, 10)), sprite),
+                new Agent(new Transform(new Vector2Int(20, 20), new Vector2Int(10, 10)), sprite),
+                new Agent(new Transform(new Vector2Int(30, 30), new Vector2Int(10, 10)), sprite),
+                new Agent(new Transform(new Vector2Int(40, 40), new Vector2Int(10, 10)), sprite)
+            };
+        }
+
+        private Texture2D getBaseAgentSprite()
+        {
+            return Texture2D.FromFile(GraphicsDevice, "content/sprites/square.jpg");
+        }
+
+        private void addAgentsToSpriteBatch()
+        {
+            foreach (var agent in agents)
+            {
+                _spriteBatch.Draw(agent.Texture,
+                new Rectangle(
+                    Convert.ToInt32(agent.Transform.Position.X) - Convert.ToInt32(agent.Transform.Size.X / 2), Convert.ToInt32(agent.Transform.Position.Y) - Convert.ToInt32(agent.Transform.Size.Y / 2),
+                    Convert.ToInt32(agent.Transform.Size.X), Convert.ToInt32(agent.Transform.Size.Y)
+                    ),
+                Color.White);
+            }
+        }
+
+        #endregion
     }
 }
