@@ -1,6 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using EvoSim.Library.Objects;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using EvoSim.Library.Geometry;
+using System;
 
 namespace EvoSim
 {
@@ -8,6 +11,8 @@ namespace EvoSim
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private Agent testAgent;
 
         public EvoSimGame()
         {
@@ -19,6 +24,8 @@ namespace EvoSim
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            Texture2D square = Texture2D.FromFile(GraphicsDevice, "content/sprites/square.jpg");
+            testAgent = new Agent(new Transform(new Vector2Int(50, 50), new Vector2Int(10, 10)), square);
 
             base.Initialize();
         }
@@ -35,6 +42,8 @@ namespace EvoSim
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            testAgent.Jitter();
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -42,7 +51,18 @@ namespace EvoSim
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Gray);
+
+            _spriteBatch.Begin();
+
+            _spriteBatch.Draw(testAgent.Texture, 
+                new Rectangle(
+                    Convert.ToInt32(testAgent.Transform.Position.X), Convert.ToInt32(testAgent.Transform.Position.Y),
+                    Convert.ToInt32(testAgent.Transform.Size.X), Convert.ToInt32(testAgent.Transform.Size.Y)
+                    ),
+                Color.White);
+
+            _spriteBatch.End();
 
             // TODO: Add your drawing code here
 
