@@ -20,6 +20,10 @@ namespace EvoSim
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            Window.AllowUserResizing = false;
+            _graphics.PreferredBackBufferWidth = GlobalConfig.arenaWidth;
+            _graphics.PreferredBackBufferHeight = GlobalConfig.arenaHeight;
         }
 
         #region Main
@@ -53,8 +57,6 @@ namespace EvoSim
 
             _spriteBatch.End();
 
-            // TODO: Add your drawing code here
-
             base.Draw(gameTime);
         }
 
@@ -64,14 +66,21 @@ namespace EvoSim
 
         private List<Agent> getStartingAgents(Texture2D sprite)
         {
-            return new List<Agent>()
+            var result = new List<Agent>();
+
+            for (int i = 0; i < GlobalConfig.baseAgentCount; i++)
             {
-                new Agent(new Transform(new Vector2Int(0, 0), new Vector2Int(10, 10)), sprite),
-                new Agent(new Transform(new Vector2Int(10, 10), new Vector2Int(10, 10)), sprite),
-                new Agent(new Transform(new Vector2Int(20, 20), new Vector2Int(10, 10)), sprite),
-                new Agent(new Transform(new Vector2Int(30, 30), new Vector2Int(10, 10)), sprite),
-                new Agent(new Transform(new Vector2Int(40, 40), new Vector2Int(10, 10)), sprite)
-            };
+                Random r = new Random();
+                result.Add(new Agent(
+                    new Transform(
+                        new Vector2Int(r.Next() % GlobalConfig.arenaWidth, r.Next() % GlobalConfig.arenaHeight), 
+                        new Vector2Int(GlobalConfig.baseAgentSize, GlobalConfig.baseAgentSize)
+                        ),
+                    sprite
+                    ));
+            }
+
+            return result;
         }
 
         private Texture2D getBaseAgentSprite()
