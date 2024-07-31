@@ -50,7 +50,7 @@ namespace EvoSim
 
             foreach (Agent agent in agents)
             {
-                agent.Jitter();
+                agent.OnUpdate();
             }
 
             base.Update(gameTime);
@@ -81,7 +81,7 @@ namespace EvoSim
             for (int i = 0; i < GlobalConfig.baseAgentCount; i++)
             {
                 Random r = new Random();
-                result.Add(new Agent(
+                result.Add(new Critter(
                     new Transform(
                         new Vector2Int(r.Next() % GlobalConfig.arenaWidth, r.Next() % GlobalConfig.arenaHeight), 
                         new Vector2Int(GlobalConfig.baseAgentSize, GlobalConfig.baseAgentSize)

@@ -8,13 +8,21 @@ using System.Threading.Tasks;
 
 namespace EvoSim.Library.Objects
 {
-    abstract class Agent : GameObject
+    public class Critter : Agent
     {
-        public Agent(Transform transform, Texture2D texture) : base(transform, texture)
+        public Critter(Transform transform, Texture2D texture) : base(transform, texture)
         {
-            
+
         }
 
-        public abstract void OnUpdate();
+        public override void OnUpdate()
+        {
+            Move();
+        }
+
+        private void Move()
+        {
+
+        }
     }
 }
