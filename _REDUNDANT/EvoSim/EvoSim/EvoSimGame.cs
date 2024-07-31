@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using EvoSim.Library.Geometry;
 using System;
 using System.Collections.Generic;
+using Model;
 
 namespace EvoSim
 {
