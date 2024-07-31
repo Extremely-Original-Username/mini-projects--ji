@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace Model.Objects
 {
     public class Critter : Agent
     {
@@ -22,8 +22,8 @@ namespace Model
         private void Move()
         {
             Random r = new Random();
-            int dX = (r.Next() % 3) - 1;
-            int dY = (r.Next() % 3) - 1;
+            int dX = r.Next() % 3 - 1;
+            int dY = r.Next() % 3 - 1;
 
             Translate(dX, dY);
         }

@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using LibNoise;
 
-namespace Model
+namespace Model.Objects
 {
     public class World
     {
-        public int Width {  get; set; }
+        public int Width { get; set; }
         public int Height { get; set; }
 
         public float[,] lightMap { get; set; }
@@ -46,8 +46,8 @@ namespace Model
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    var noiseVal = baseMap.GetValue((float)x / scale, (float)y / scale, rand.NextSingle() / scale)
-                        - reductionMap.GetValue((float)x / altScale, (float)y / altScale, rand.NextSingle() / altScale) * GlobalConfig.shadowEffectScale;
+                    var noiseVal = baseMap.GetValue(x / scale, y / scale, rand.NextSingle() / scale)
+                        - reductionMap.GetValue(x / altScale, y / altScale, rand.NextSingle() / altScale) * GlobalConfig.shadowEffectScale;
                     noiseVal = Math.Clamp((noiseVal + 1f) / 2f, 0, 1);
 
                     lightMap[y, x] = noiseVal;

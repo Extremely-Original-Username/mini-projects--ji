@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Model;
 using Model.Config;
 using Model.Geometry;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using Model.Objects;
 
 namespace Critters
 {

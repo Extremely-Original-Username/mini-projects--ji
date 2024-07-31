@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace Model.Objects
 {
     public abstract class Agent : WorldObject
     {
@@ -21,13 +21,13 @@ namespace Model
             Position.X += x;
             Position.Y += y;
 
-            if (Position.X > this.World.Width)
+            if (Position.X > World.Width)
             {
-                Position.X = Position.X % this.World.Width;
+                Position.X = Position.X % World.Width;
             }
-            if (Position.Y > this.World.Height)
+            if (Position.Y > World.Height)
             {
-                Position.Y = Position.Y % this.World.Height;
+                Position.Y = Position.Y % World.Height;
             }
             if (Position.X < 0)
             {
