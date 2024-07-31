@@ -13,11 +13,14 @@ using LibNoise.Renderer;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Color = LibNoise.Renderer.Color;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace EvoSim.Library.Objects
 {
     public class World : GameObject
     {
+        public float[,] lightMap {  get; set; }
+
         public World(GraphicsDevice graphicsDevice) : base(graphicsDevice)
         {
             this.Transform = new Transform(
@@ -27,7 +30,13 @@ namespace EvoSim.Library.Objects
 
             Texture = new Texture2D(graphicsDevice, Convert.ToInt32(this.Transform.Size.X), Convert.ToInt32(this.Transform.Size.Y));
 
-            Microsoft.Xna.Framework.Color[] buffer = new Microsoft.Xna.Framework.Color[Texture.Width * Texture.Height];
+            GenerateLightMap();
+            UpdateTexture();
+        }
+
+        private void GenerateLightMap()
+        {
+            lightMap = new float[Texture.Width, Texture.Height];
 
             var rand = new Random();
             var baseMap = new LibNoise.Primitive.SimplexPerlin()
@@ -51,10 +60,25 @@ namespace EvoSim.Library.Objects
                         - reductionMap.GetValue((float)x / altScale, (float)y / altScale, rand.NextSingle() / altScale) * GlobalConfig.shadowEffectScale;
                     noiseVal = Math.Clamp((noiseVal + 1f) / 2f, 0, 1);
 
+                    lightMap[y, x] = noiseVal;
+                }
+            }
+        }
+
+        private void UpdateTexture()
+        {
+            Microsoft.Xna.Framework.Color[] buffer = new Microsoft.Xna.Framework.Color[Texture.Width * Texture.Height];
+
+            for (int y = 0; y < Texture.Height; y++)
+            {
+                for (int x = 0; x < Texture.Width; x++)
+                {
+                    var val = lightMap[x, y];
+
                     buffer[x + (Texture.Width * y)] = new Microsoft.Xna.Framework.Color(
-                        Convert.ToInt32(GlobalConfig.baseLightR * noiseVal),
-                        Convert.ToInt32(GlobalConfig.baseLightG * noiseVal),
-                        Convert.ToInt32(GlobalConfig.baseLightB * noiseVal),
+                        Convert.ToInt32(GlobalConfig.baseLightR * val),
+                        Convert.ToInt32(GlobalConfig.baseLightG * val),
+                        Convert.ToInt32(GlobalConfig.baseLightB * val),
                         1000);
                 }
             }

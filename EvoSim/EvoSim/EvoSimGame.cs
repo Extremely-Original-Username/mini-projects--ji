@@ -48,6 +48,11 @@ namespace EvoSim
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            foreach (Agent agent in agents)
+            {
+                agent.Jitter();
+            }
+
             base.Update(gameTime);
         }
 
