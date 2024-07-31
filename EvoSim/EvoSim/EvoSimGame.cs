@@ -13,6 +13,7 @@ namespace EvoSim
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private World world;
         private List<Agent> agents;
 
         public EvoSimGame()
@@ -20,22 +21,25 @@ namespace EvoSim
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-
             Window.AllowUserResizing = false;
-            _graphics.PreferredBackBufferWidth = GlobalConfig.arenaWidth;
-            _graphics.PreferredBackBufferHeight = GlobalConfig.arenaHeight;
+            
         }
 
         #region Main
 
         protected override void Initialize()
         {
+            _graphics.PreferredBackBufferWidth = GlobalConfig.arenaWidth;
+            _graphics.PreferredBackBufferHeight = GlobalConfig.arenaHeight;
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            world = new World(GraphicsDevice);
             agents = getStartingAgents(getBaseAgentSprite());
         }
 
@@ -53,6 +57,7 @@ namespace EvoSim
 
             _spriteBatch.Begin();
 
+            addWorldToSpriteBatch();
             addAgentsToSpriteBatch();
 
             _spriteBatch.End();
@@ -86,6 +91,16 @@ namespace EvoSim
         private Texture2D getBaseAgentSprite()
         {
             return Texture2D.FromFile(GraphicsDevice, "content/sprites/square.jpg");
+        }
+
+        private void addWorldToSpriteBatch()
+        {
+            _spriteBatch.Draw(world.Texture,
+                new Rectangle(
+                    Convert.ToInt32(world.Transform.Position.X), Convert.ToInt32(world.Transform.Position.Y),
+                    Convert.ToInt32(world.Transform.Size.X), Convert.ToInt32(world.Transform.Size.Y)
+                    ),
+                Color.White);
         }
 
         private void addAgentsToSpriteBatch()
