@@ -9,12 +9,17 @@ namespace Model.Objects
 {
     public abstract class Agent : WorldObject
     {
-        protected Agent(World world, Vector2<int> position, Vector2<int> size, Vector2<float> facingAngle) : base(world, position, size, facingAngle)
-        {
+        public Vector2<float> FacingAngle { get; set; }
 
+        protected Agent(World world, Vector2<int> position, Vector2<int> size, Vector2<float> facingAngle) : base(world, position, size)
+        {
+            this.FacingAngle = facingAngle;
         }
 
-        public abstract void OnUpdate();
+        public virtual void OnUpdate()
+        {
+            FacingAngle.normalise();
+        }
 
         protected void Translate(int x, int y)
         {
