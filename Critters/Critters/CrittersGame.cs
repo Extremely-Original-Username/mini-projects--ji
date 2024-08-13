@@ -146,14 +146,41 @@ namespace Critters
 
         private Texture2D GenerateAgentSprite(Agent agent)
         {
+            // Create a new Texture2D with the specified width and height
             var result = new Texture2D(GraphicsDevice, agent.Size.X, agent.Size.Y);
+
+            // Initialize a color array for the texture data
             var dataColors = new Color[result.Width * result.Height];
-            for (var i = 0; i < dataColors.Count(); i++)
+
+            // Calculate the radius of the circle
+            int radius = Math.Min(agent.Size.X, agent.Size.Y) / 2 - 1; //-1 helps with smaller sizes
+            int centerX = agent.Size.X / 2;
+            int centerY = agent.Size.Y / 2;
+
+            for (var y = 0; y < agent.Size.Y; y++)
             {
-                dataColors[i] = new Color(255, 255, 255, 255);
+                for (var x = 0; x < agent.Size.X; x++)
+                {
+                    // Calculate the distance from the center of the texture
+                    int distX = x - centerX;
+                    int distY = y - centerY;
+                    double distance = Math.Sqrt(distX * distX + distY * distY);
+
+                    // If the distance is less than or equal to the radius, color the pixel
+                    if (distance <= radius)
+                    {
+                        dataColors[y * agent.Size.X + x] = new Color(255, 255, 255, 255); // White color with full opacity
+                    }
+                    else
+                    {
+                        dataColors[y * agent.Size.X + x] = new Color(0, 0, 0, 0); // Transparent
+                    }
+                }
             }
 
+            // Set the texture data
             result.SetData(dataColors);
+
             return result;
         }
 

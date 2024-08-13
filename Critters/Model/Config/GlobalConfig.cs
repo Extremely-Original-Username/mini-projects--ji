@@ -18,6 +18,6 @@ namespace Model.Config
         public const float shadowEffectScale = 1.6f;    //Multiplier on shadow perlin map subtraction
 
         //Agent settings
-        public const int baseAgentSize = 10;    //Default size of agents in pixels
+        public const int baseAgentSize = 20;    //Default size of agents in pixels
     }
 }
