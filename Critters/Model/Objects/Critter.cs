@@ -9,7 +9,7 @@ namespace Model.Objects
 {
     public class Critter : Agent
     {
-        public Critter(World world, Vector2Int position, Vector2Int size) : base(world, position, size)
+        public Critter(World world, Vector2<int> position, Vector2<int> size, Vector2<float> facingAngle) : base(world, position, size, facingAngle)
         {
 
         }

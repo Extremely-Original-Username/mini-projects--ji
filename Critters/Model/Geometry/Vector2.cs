@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Model.Geometry
 {
-    public class Vector2Int
+    public class Vector2<T>
     {
-        public int X {  get; set; } 
-        public int Y { get; set; }
+        public T X {  get; set; } 
+        public T Y { get; set; }
 
-        public Vector2Int(int x, int y)
+        public Vector2(T x, T y)
         {
             X = x;
             Y = y;

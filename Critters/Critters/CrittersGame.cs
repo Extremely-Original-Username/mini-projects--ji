@@ -89,8 +89,9 @@ namespace Critters
             for (int i = 0; i < GlobalConfig.baseAgentCount; i++)
             {
                 result.Add(new Critter(world, 
-                        new Vector2Int(r.Next() % world.Width, r.Next() % world.Height),
-                        new Vector2Int(GlobalConfig.baseAgentSize, GlobalConfig.baseAgentSize)
+                        new Vector2<int>(r.Next() % world.Width, r.Next() % world.Height),
+                        new Vector2<int>(GlobalConfig.baseAgentSize, GlobalConfig.baseAgentSize),
+                        new Vector2<float>(1, 1)
                     ));
             }
 
