@@ -55,9 +55,9 @@ namespace Model.Genetics.Parts.Base
                 )},
         };
 
-        public static Vector2<double> GetPartPosition(int position, int of)
+        public static Vector2<double> GetPartPosition(int position, int of, float offsetAngle = 0)
         {
-            double angle = 2 * Math.PI * position / of;
+            double angle = (2 * Math.PI * position / of) + offsetAngle;
 
             return new Vector2<double>(Math.Cos(angle), Math.Sin(angle));
         }

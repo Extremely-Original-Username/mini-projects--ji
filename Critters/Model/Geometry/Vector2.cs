@@ -86,5 +86,27 @@ namespace Model.Geometry
                 throw new InvalidOperationException("Normalization is only supported for float types");
             }
         }
+
+        public T toAngle()
+        {
+            if (typeof(T) == typeof(float))
+            {
+                float x = (float)(object)X;
+                float y = (float)(object)Y;
+
+                return (T)(Object)float.Parse(Math.Atan2(y, x).ToString());
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                double x = (double)(object)X;
+                double y = (double)(object)Y;
+
+                return (T)(Object)Math.Atan2(y, x);
+            }
+            else
+            {
+                throw new InvalidOperationException("ToAngle is only supported for float types");
+            }
+        }
     }
 }

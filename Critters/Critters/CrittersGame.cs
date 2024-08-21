@@ -124,7 +124,7 @@ namespace Critters
                         Color.White);
                     for (int i = 1; i < agentSprites[agent].Length; i++)
                     {
-                        var partOffset = PartDef.GetPartPosition(i - 1, GlobalConfig.maxChildParts);
+                        var partOffset = PartDef.GetPartPosition(i - 1, GlobalConfig.maxChildParts, agent.FacingAngle.toAngle());
                         partOffset.X *= GlobalConfig.baseAgentSize / 1.5;
                         partOffset.Y *= GlobalConfig.baseAgentSize / 1.5;
 

@@ -31,8 +31,6 @@ namespace Model.Objects
                 x.Definition.PresentEffect.Invoke(x, this);
                 this.metabolicRate += x.Definition.MetabolicLoad * (float)x.Size.X * (float)x.Size.Y;
             });
-            //maxEnergy = 0;
-            //metabolicRate = (float)Math.Pow(sizeScalar, 0.75f) / 100; //Divisor of 10 = 30 frame starvation for 100 maxEnergy, 100 = 300 - TODO make parameter
 
             energy = maxEnergy / 2 + (new Random().Next(40) - 20); //Make these parameters too
         }
@@ -85,8 +83,8 @@ namespace Model.Objects
         private void Rotate()
         {
             Random r = new Random();
-            FacingAngle.X += ((r.Next() % 3) - 1) / 1.5f;
-            FacingAngle.Y += ((r.Next() % 3) - 1) / 1.5f;
+            FacingAngle.X += ((r.Next() % 3) - 1) / 2f;
+            FacingAngle.Y += ((r.Next() % 3) - 1) / 2f;
             FacingAngle.normalise();
         }
 
