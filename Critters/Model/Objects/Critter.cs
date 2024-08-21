@@ -14,6 +14,7 @@ namespace Model.Objects
         private readonly float maxEnergy;
         private float energy;
         private float metabolicRate;
+        private float reproductionThreshold = 0.7f;
 
         public Critter(World world, Vector2<int> position, Vector2<int> size, Vector2<float> facingAngle) : base(world, position, size, facingAngle)
         {
@@ -29,9 +30,10 @@ namespace Model.Objects
             base.OnUpdate();
 
             if (Dead) return;
+            //All critter bahviour below
 
             metabolise();
-            if (energy > maxEnergy * 0.7) tryReproduce();
+            if (energy > maxEnergy * reproductionThreshold) tryReproduce();
             else if (energy <= 0) die();
 
             Move();
