@@ -1,4 +1,8 @@
-﻿using Model.Geometry;
+﻿using Model.Config;
+using Model.Genetics;
+using Model.Genetics.Parts;
+using Model.Genetics.Parts.Base;
+using Model.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +14,25 @@ namespace Model.Objects
     public class Critter : Agent
     {
         public bool Dead { get; private set; } = false;
+        public float maxEnergy { get; set; }
+        public float energy { get; set; }
+        public float metabolicRate { get; set; }
+        public float reproductionThreshold = 0.7f;
 
-        private readonly float maxEnergy;
-        private float energy;
-        private float metabolicRate;
-        private float reproductionThreshold = 0.7f;
+        public Part BasePart { get; }
 
-        public Critter(World world, Vector2<int> position, Vector2<int> size, Vector2<float> facingAngle) : base(world, position, size, facingAngle)
+        public Critter(World world, Vector2<int> position, Vector2<int> size, Vector2<float> facingAngle, DNA dna = null) : base(world, position, size, facingAngle)
         {
-            float sizeScalar = size.X * size.Y;
-            maxEnergy = sizeScalar;
-            metabolicRate = (float)Math.Pow(sizeScalar, 0.75f) / 100; //Divisor of 10 = 30 frame starvation for 100 maxEnergy, 100 = 300 - TODO make parameter
+            if (dna == null) dna = new DNA();
+            BasePart = ParseDNA(dna);
+
+            DoActionForPartAndChildren(BasePart, x =>
+            {
+                x.Definition.PresentEffect.Invoke(x, this);
+                this.metabolicRate += x.Definition.MetabolicLoad * (float)x.Size.X * (float)x.Size.Y;
+            });
+            //maxEnergy = 0;
+            //metabolicRate = (float)Math.Pow(sizeScalar, 0.75f) / 100; //Divisor of 10 = 30 frame starvation for 100 maxEnergy, 100 = 300 - TODO make parameter
 
             energy = maxEnergy / 2 + (new Random().Next(40) - 20); //Make these parameters too
         }
@@ -32,6 +44,7 @@ namespace Model.Objects
             if (Dead) return;
             //All critter bahviour below
 
+            DoActionForPartAndChildren(BasePart, x => { x.Definition.UpdateEffect.Invoke(x, this); });
             metabolise();
             if (energy > maxEnergy * reproductionThreshold) tryReproduce();
             else if (energy <= 0) die();
@@ -42,7 +55,9 @@ namespace Model.Objects
 
         private void metabolise()
         {
-            energy -= metabolicRate;
+            if(energy > maxEnergy) energy = maxEnergy;
+
+            energy -= metabolicRate / 100;
         }
 
         private void tryReproduce()
@@ -73,6 +88,60 @@ namespace Model.Objects
             FacingAngle.X += ((r.Next() % 3) - 1) / 1.5f;
             FacingAngle.Y += ((r.Next() % 3) - 1) / 1.5f;
             FacingAngle.normalise();
+        }
+
+        private void DoActionForPartAndChildren(Part part, Action<Part> action)
+        {
+            action.Invoke(part);
+            foreach (Part child in part.Children)
+            {
+                if (child != null)
+                {
+                    DoActionForPartAndChildren(child, action);
+                }
+            }
+        }
+
+        private Part ParseDNA(DNA dna)
+        {
+            Part result = generatePartFromDnaSegment(dna.Code);
+
+            return result;
+        }
+
+        private Part generatePartFromDnaSegment(string segment)
+        {
+            if (!PartDef.PartList.ContainsKey(segment[0]) || segment[segment.Length - 1] != ')') throw new InvalidDataException("Invalid DNA segment");
+
+            Part result = new Part(PartDef.PartList[segment[0]]);
+
+            int currentIndex = segment.IndexOf("(") + 1;
+            int currentChild = 0;
+            while (currentChild < GlobalConfig.maxChildParts)
+            {
+                Part? current = new Part(PartDef.PartList[segment[currentIndex]]);
+                if (current.Definition != null)
+                {
+                    int endindex = currentIndex;
+                    int depth = -1;
+                    while (endindex < segment.Length)
+                    {
+                        char currentCharacter = segment[endindex];
+
+                        if (currentCharacter == ')' && depth == 0) break;
+                        else if (currentCharacter == ')') depth -= 1;
+                        if (currentCharacter == '(') depth += 1;
+                        endindex += 1;
+                    }
+                    current = generatePartFromDnaSegment(segment.Substring(currentIndex, endindex - currentIndex + 1));
+                    result.Children[currentChild] = current;
+                    currentIndex = endindex;
+                }
+                currentIndex += 1;
+                currentChild += 1;
+            }
+
+            return result;
         }
     }
 }

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Model.Objects;
+using Model.Genetics.Parts;
+using Model.Genetics.Parts.Base;
 
 namespace Critters
 {
@@ -19,7 +21,7 @@ namespace Critters
         private List<Agent> agents;
 
         private Texture2D worldSprite;
-        private Dictionary<Agent, Texture2D> agentSprites;
+        private Dictionary<Agent, Texture2D[]> agentSprites;
 
         public CrittersGame()
         {
@@ -112,12 +114,37 @@ namespace Critters
         {
             foreach (var agent in agents)
             {
-                _spriteBatch.Draw(agentSprites[agent],
-                new Rectangle(
-                    Convert.ToInt32(agent.Position.X) - Convert.ToInt32(agent.Size.X / 2), Convert.ToInt32(agent.Position.Y) - Convert.ToInt32(agent.Size.Y / 2),
-                    Convert.ToInt32(agent.Size.X), Convert.ToInt32(agent.Size.Y)
-                    ),
-                Color.White);
+                if (agent.GetType() == typeof(Critter))
+                {
+                    _spriteBatch.Draw(agentSprites[agent][0],
+                        new Rectangle(
+                            Convert.ToInt32(agent.Position.X) - Convert.ToInt32(agent.Size.X / 2), Convert.ToInt32(agent.Position.Y) - Convert.ToInt32(agent.Size.Y / 2),
+                            Convert.ToInt32(agent.Size.X), Convert.ToInt32(agent.Size.Y)
+                            ),
+                        Color.White);
+                    for (int i = 1; i < agentSprites[agent].Length; i++)
+                    {
+                        var partOffset = PartDef.GetPartPosition(i - 1, GlobalConfig.maxChildParts);
+                        partOffset.X *= GlobalConfig.baseAgentSize / 1.5;
+                        partOffset.Y *= GlobalConfig.baseAgentSize / 1.5;
+
+                        _spriteBatch.Draw(agentSprites[agent][i],
+                        new Rectangle(
+                            Convert.ToInt32(agent.Position.X) - Convert.ToInt32(agent.Size.X / 2) + (int)partOffset.X, Convert.ToInt32(agent.Position.Y) - Convert.ToInt32(agent.Size.Y / 2) + (int)partOffset.Y,
+                            Convert.ToInt32(agent.Size.X), Convert.ToInt32(agent.Size.Y)
+                            ),
+                        Color.White);
+                    }
+                }
+                else
+                {
+                    _spriteBatch.Draw(agentSprites[agent][0],
+                        new Rectangle(
+                            Convert.ToInt32(agent.Position.X) - Convert.ToInt32(agent.Size.X / 2), Convert.ToInt32(agent.Position.Y) - Convert.ToInt32(agent.Size.Y / 2),
+                            Convert.ToInt32(agent.Size.X), Convert.ToInt32(agent.Size.Y)
+                            ),
+                        Color.White);
+                }
             }
         }
 
@@ -144,22 +171,22 @@ namespace Critters
             return result;
         }
 
-        private Texture2D GenerateAgentSprite(Agent agent)
+        private Texture2D GenerateCircleSprite(Vector2<int> size, Color color)
         {
             // Create a new Texture2D with the specified width and height
-            var result = new Texture2D(GraphicsDevice, agent.Size.X, agent.Size.Y);
+            var result = new Texture2D(GraphicsDevice, size.X, size.Y);
 
             // Initialize a color array for the texture data
             var dataColors = new Color[result.Width * result.Height];
 
             // Calculate the radius of the circle
-            int radius = Math.Min(agent.Size.X, agent.Size.Y) / 2 - 1; //-1 helps with smaller sizes
-            int centerX = agent.Size.X / 2;
-            int centerY = agent.Size.Y / 2;
+            int radius = Math.Min(size.X, size.Y) / 2 - 1; //-1 helps with smaller sizes
+            int centerX = size.X / 2;
+            int centerY = size.Y / 2;
 
-            for (var y = 0; y < agent.Size.Y; y++)
+            for (var y = 0; y < size.Y; y++)
             {
-                for (var x = 0; x < agent.Size.X; x++)
+                for (var x = 0; x < size.X; x++)
                 {
                     // Calculate the distance from the center of the texture
                     int distX = x - centerX;
@@ -169,11 +196,11 @@ namespace Critters
                     // If the distance is less than or equal to the radius, color the pixel
                     if (distance <= radius)
                     {
-                        dataColors[y * agent.Size.X + x] = new Color(255, 255, 255, 255); // White color with full opacity
+                        dataColors[y * size.X + x] = color; // White color with full opacity
                     }
                     else
                     {
-                        dataColors[y * agent.Size.X + x] = new Color(0, 0, 0, 0); // Transparent
+                        dataColors[y * size.X + x] = new Color(0, 0, 0, 0); // Transparent
                     }
                 }
             }
@@ -184,13 +211,41 @@ namespace Critters
             return result;
         }
 
-        private Dictionary<Agent, Texture2D> GenerateAgentSprites(List<Agent> agents)
+        private Texture2D[] GenerateAgentSprite(Agent agent)
         {
-            Dictionary < Agent, Texture2D > result = new Dictionary<Agent, Texture2D> ();
+            return new Texture2D[1] { GenerateCircleSprite(agent.Size, new Color(255, 255, 255, 255)) };
+        }
+
+        private Texture2D[] GenerateCritterSprite(Critter agent)
+        {
+            return GeneratePartSprite(agent.BasePart);
+        }
+
+        private Texture2D[] GeneratePartSprite(Part part)
+        {
+            List<Texture2D> result = new List<Texture2D>() { GenerateCircleSprite(part.Size, part.Definition.Name == "Photosynthesis" ? new Color(100, 255, 100, 255) : new Color(255, 255, 255, 255)) };
+            foreach (var child in part.Children)
+            {
+                if (child != null && child.Definition != null)
+                {
+                    result.AddRange(GeneratePartSprite(child));
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        private Dictionary<Agent, Texture2D[]> GenerateAgentSprites(List<Agent> agents)
+        {
+            Dictionary < Agent, Texture2D[]> result = new Dictionary<Agent, Texture2D[]> ();
 
             foreach (var agent in agents)
             {
-                result.Add(agent, GenerateAgentSprite(agent));
+                if (agent.GetType() == typeof(Critter))
+                {
+                    result.Add(agent, GenerateCritterSprite((Critter)agent));
+                }
+                else result.Add(agent, GenerateAgentSprite(agent));
             }
 
             return result;

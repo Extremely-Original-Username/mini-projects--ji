@@ -9,7 +9,7 @@ namespace Model.Objects
 {
     public abstract class WorldObject
     {
-        protected World World { get; }
+        public World World { get; }
         public Vector2<int> Position { get; }
         public Vector2<int> Size { get; }
 

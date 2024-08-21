@@ -32,6 +32,12 @@ namespace Model.Geometry
                 X = (T)(object)(r.NextSingle() * sign);
                 Y = (T)(object)(r.NextSingle() * sign);
             }
+            if (typeof(T) == typeof(double))
+            {
+                double sign = (r.NextDouble() - 0.5) * 2;
+                X = (T)(object)(r.NextDouble() * sign);
+                Y = (T)(object)(r.NextDouble() * sign);
+            }
             if (typeof(T) == typeof(int))
             {
                 int sign = r.Next() % 2 == 0? 1 : -1;
@@ -49,6 +55,23 @@ namespace Model.Geometry
 
                 // Calculate the magnitude of the vector
                 float magnitude = (float)Math.Sqrt(x * x + y * y);
+
+                // Avoid division by zero
+                if (magnitude > 0)
+                {
+                    // Normalize the vector components
+                    X = (T)(object)(x / magnitude);
+                    Y = (T)(object)(y / magnitude);
+                }
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                // Cast X and Y to float
+                double x = (double)(object)X;
+                double y = (double)(object)Y;
+
+                // Calculate the magnitude of the vector
+                double magnitude = (double)Math.Sqrt(x * x + y * y);
 
                 // Avoid division by zero
                 if (magnitude > 0)

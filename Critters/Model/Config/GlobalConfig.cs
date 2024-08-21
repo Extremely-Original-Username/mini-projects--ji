@@ -19,5 +19,8 @@ namespace Model.Config
 
         //Agent settings
         public const int baseAgentSize = 10;    //Default size of agents in pixels
+
+        //Critter settings
+        public const int maxChildParts = 6; //Number of parts per part, including base
     }
 }
