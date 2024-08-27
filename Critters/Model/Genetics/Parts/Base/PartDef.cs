@@ -55,7 +55,8 @@ namespace Model.Genetics.Parts.Base
                 )},
         };
 
-        public static Vector2<double> GetPartPosition(int position, int of, float offsetAngle = 0)
+        //Gets normal vector of part position based total potential children and an offset
+        public static Vector2<double> GetRelativePartPosition(int position, int of, float offsetAngle = 0)
         {
             double angle = (2 * Math.PI * position / of) + offsetAngle;
 

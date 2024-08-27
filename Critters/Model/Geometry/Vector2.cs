@@ -108,5 +108,10 @@ namespace Model.Geometry
                 throw new InvalidOperationException("ToAngle is only supported for float types");
             }
         }
+
+        public Vector2<T> add(Vector2<T> a, Vector2<T> b)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

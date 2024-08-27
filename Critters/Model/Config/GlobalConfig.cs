@@ -22,5 +22,6 @@ namespace Model.Config
 
         //Critter settings
         public const int maxChildParts = 6; //Number of parts per part, including base
+        public const int partOffset = 15; //Pixel offset of parts
     }
 }

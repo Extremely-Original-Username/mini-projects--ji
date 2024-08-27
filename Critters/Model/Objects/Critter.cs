@@ -102,22 +102,26 @@ namespace Model.Objects
 
         private Part ParseDNA(DNA dna)
         {
-            Part result = generatePartFromDnaSegment(dna.Code);
+            Part result = generatePartFromDnaSegment(dna.Code, null);
 
             return result;
         }
 
-        private Part generatePartFromDnaSegment(string segment)
+        private Part generatePartFromDnaSegment(string segment, Part? parent)
         {
             if (!PartDef.PartList.ContainsKey(segment[0]) || segment[segment.Length - 1] != ')') throw new InvalidDataException("Invalid DNA segment");
 
-            Part result = new Part(PartDef.PartList[segment[0]]);
+            //Get base part of current segment
+            Part result = new Part(PartDef.PartList[segment[0]], parent);
 
+            //Iterate until end of part children
             int currentIndex = segment.IndexOf("(") + 1;
             int currentChild = 0;
             while (currentChild < GlobalConfig.maxChildParts)
             {
-                Part? current = new Part(PartDef.PartList[segment[currentIndex]]);
+                //Get current child part
+                Part? current = new Part(PartDef.PartList[segment[currentIndex]], result);
+                //If exists in mapping try and add children
                 if (current.Definition != null)
                 {
                     int endindex = currentIndex;
@@ -131,7 +135,8 @@ namespace Model.Objects
                         if (currentCharacter == '(') depth += 1;
                         endindex += 1;
                     }
-                    current = generatePartFromDnaSegment(segment.Substring(currentIndex, endindex - currentIndex + 1));
+                    //Recur to add child
+                    current = generatePartFromDnaSegment(segment.Substring(currentIndex, endindex - currentIndex + 1), result);
                     result.Children[currentChild] = current;
                     currentIndex = endindex;
                 }
@@ -141,5 +146,30 @@ namespace Model.Objects
 
             return result;
         }
+        
+        public bool IsOwnerOfPart(Part part)
+        {
+            return BasePart.IsOrIsParentOf(part);
+        }
+
+        public int GetIndexOfPart(Part part)
+        {
+            if (!IsOwnerOfPart(part)) throw new InvalidDataException("Passed part must be child of critter");
+            if (part.Parent == null) throw new ArgumentNullException("Passed part has no parent, so has no index");
+
+            return part.Parent.Children.ToList().IndexOf(part);
+        }
+    
+        public Vector2<int> getPartPosition(Part part)
+        {
+            if (!IsOwnerOfPart(part)) throw new InvalidDataException("Passed part must be child of critter");
+
+            Vector2<int> result = new Vector2<int>();
+            if (part.Parent == null) return this.Position;
+
+            Vector2<double> relativeVector = PartDef.GetRelativePartPosition(GetIndexOfPart(part), GlobalConfig.maxChildParts, FacingAngle.toAngle());
+            Vector2<int> parentPos = getPartPosition(part.Parent);//TODO: Use dynamic programming to optimise this
+            return new Vector2<int>(parentPos.X + (int)(relativeVector.X * GlobalConfig.partOffset), parentPos.Y + (int)(relativeVector.Y * GlobalConfig.partOffset));
+        } 
     }
 }

@@ -115,7 +115,7 @@ namespace Critters
             foreach (var agent in agents)
             {
                 if (agent.GetType() == typeof(Critter))
-                {
+                { //TODO: change this to use critter.getpartposition
                     _spriteBatch.Draw(agentSprites[agent][0],
                         new Rectangle(
                             Convert.ToInt32(agent.Position.X) - Convert.ToInt32(agent.Size.X / 2), Convert.ToInt32(agent.Position.Y) - Convert.ToInt32(agent.Size.Y / 2),
@@ -124,7 +124,7 @@ namespace Critters
                         Color.White);
                     for (int i = 1; i < agentSprites[agent].Length; i++)
                     {
-                        var partOffset = PartDef.GetPartPosition(i - 1, GlobalConfig.maxChildParts, agent.FacingAngle.toAngle());
+                        var partOffset = PartDef.GetRelativePartPosition(i - 1, GlobalConfig.maxChildParts, agent.FacingAngle.toAngle());
                         partOffset.X *= GlobalConfig.baseAgentSize / 1.5;
                         partOffset.Y *= GlobalConfig.baseAgentSize / 1.5;
 
@@ -171,10 +171,12 @@ namespace Critters
             return result;
         }
 
-        private Texture2D GenerateCircleSprite(Vector2<int> size, Color color)
+        //Add part parameter if associated with part
+        private Texture2D GenerateCircleSprite(Vector2<int> size, Color color, Part part = null)
         {
             // Create a new Texture2D with the specified width and height
             var result = new Texture2D(GraphicsDevice, size.X, size.Y);
+            if (part != null) result = new PartTexture(GraphicsDevice, size.X, size.Y, part);
 
             // Initialize a color array for the texture data
             var dataColors = new Color[result.Width * result.Height];
@@ -221,9 +223,10 @@ namespace Critters
             return GeneratePartSprite(agent.BasePart);
         }
 
+        //Recursive function to generate critter from base part
         private Texture2D[] GeneratePartSprite(Part part)
         {
-            List<Texture2D> result = new List<Texture2D>() { GenerateCircleSprite(part.Size, part.Definition.Name == "Photosynthesis" ? new Color(100, 255, 100, 255) : new Color(255, 255, 255, 255)) };
+            List<Texture2D> result = new List<Texture2D>() { GenerateCircleSprite(part.Size, part.Definition.Name == "Photosynthesis" ? new Color(100, 255, 100, 255) : new Color(255, 255, 255, 255), part) };
             foreach (var child in part.Children)
             {
                 if (child != null && child.Definition != null)
@@ -249,6 +252,15 @@ namespace Critters
             }
 
             return result;
+        }
+
+        private class PartTexture : Texture2D
+        {
+            public Part Part { get; private set; }
+            public PartTexture(GraphicsDevice graphicsDevice, int width, int height, Part part) : base(graphicsDevice, width, height)
+            {
+                Part = part;
+            }
         }
 
         #endregion

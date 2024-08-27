@@ -19,7 +19,7 @@ namespace Model.Genetics
             {
                 if (i == 0 || i == 3)
                 {
-                    Code += "P(000000)";
+                    Code += "P(0P(000000)0000)";
                     continue;
                 }
                 Code += '0';
