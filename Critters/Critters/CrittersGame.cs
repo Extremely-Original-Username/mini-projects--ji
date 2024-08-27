@@ -9,6 +9,7 @@ using System.Linq;
 using Model.Objects;
 using Model.Genetics.Parts;
 using Model.Genetics.Parts.Base;
+using Critters.Drawing;
 
 namespace Critters
 {
@@ -23,9 +24,12 @@ namespace Critters
         private Texture2D worldSprite;
         private Dictionary<Agent, Texture2D[]> agentSprites;
 
+        private SpriteHelper spriteHelper;
+
         public CrittersGame()
         {
             _graphics = new GraphicsDeviceManager(this);
+            spriteHelper = new SpriteHelper(GraphicsDevice);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
@@ -46,10 +50,10 @@ namespace Critters
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             world = new World(GlobalConfig.arenaWidth, GlobalConfig.arenaHeight);
-            worldSprite = GenerateWorldSprite(world);
+            worldSprite = spriteHelper.GenerateWorldSprite(world);
 
             agents = getStartingAgents();
-            agentSprites = GenerateAgentSprites(agents);
+            agentSprites = spriteHelper.GenerateAgentSprites(agents);
         }
 
         protected override void Update(GameTime gameTime)
@@ -118,7 +122,7 @@ namespace Critters
                 {
                     for (int i = 0; i < agentSprites[agent].Length; i++)
                     {
-                        var currentSprite = (PartTexture)agentSprites[agent][i];
+                        var currentSprite = (SpriteHelper.PartTexture)agentSprites[agent][i];
                         var partPosition = ((Critter)agent).getPartPosition(currentSprite.Part);
 
                         _spriteBatch.Draw(currentSprite,
@@ -138,121 +142,6 @@ namespace Critters
                             ),
                         Color.White);
                 }
-            }
-        }
-
-        private Texture2D GenerateWorldSprite(World world)
-        {
-            var result = new Texture2D(GraphicsDevice, world.Width, world.Height);
-            var dataColors = new Color[result.Width * result.Height];
-
-            for (int y = 0; y < world.Height; y++)
-            {
-                for (int x = 0; x < world.Width; x++)
-                {
-                    float lightLevel = world.lightMap[x, y];
-                    float value = 255f * lightLevel;
-                    dataColors[y * world.Width + x] = new Color(
-                        Convert.ToInt32(255f * lightLevel),
-                        Convert.ToInt32(255f * lightLevel),
-                        Convert.ToInt32(255f * lightLevel),
-                        1000);
-                }
-            }
-
-            result.SetData(dataColors);
-            return result;
-        }
-
-        //Add part parameter if associated with part
-        private Texture2D GenerateCircleSprite(Vector2<int> size, Color color, Part part = null)
-        {
-            // Create a new Texture2D with the specified width and height
-            var result = new Texture2D(GraphicsDevice, size.X, size.Y);
-            if (part != null) result = new PartTexture(GraphicsDevice, size.X, size.Y, part);
-
-            // Initialize a color array for the texture data
-            var dataColors = new Color[result.Width * result.Height];
-
-            // Calculate the radius of the circle
-            int radius = Math.Min(size.X, size.Y) / 2 - 1; //-1 helps with smaller sizes
-            int centerX = size.X / 2;
-            int centerY = size.Y / 2;
-
-            for (var y = 0; y < size.Y; y++)
-            {
-                for (var x = 0; x < size.X; x++)
-                {
-                    // Calculate the distance from the center of the texture
-                    int distX = x - centerX;
-                    int distY = y - centerY;
-                    double distance = Math.Sqrt(distX * distX + distY * distY);
-
-                    // If the distance is less than or equal to the radius, color the pixel
-                    if (distance <= radius)
-                    {
-                        dataColors[y * size.X + x] = color; // White color with full opacity
-                    }
-                    else
-                    {
-                        dataColors[y * size.X + x] = new Color(0, 0, 0, 0); // Transparent
-                    }
-                }
-            }
-
-            // Set the texture data
-            result.SetData(dataColors);
-
-            return result;
-        }
-
-        private Texture2D[] GenerateAgentSprite(Agent agent)
-        {
-            return new Texture2D[1] { GenerateCircleSprite(agent.Size, new Color(255, 255, 255, 255)) };
-        }
-
-        private Texture2D[] GenerateCritterSprite(Critter agent)
-        {
-            return GeneratePartSprite(agent.BasePart);
-        }
-
-        //Recursive function to generate critter from base part
-        private Texture2D[] GeneratePartSprite(Part part)
-        {
-            List<Texture2D> result = new List<Texture2D>() { GenerateCircleSprite(part.Size, part.Definition.Name == "Photosynthesis" ? new Color(100, 255, 100, 255) : new Color(255, 255, 255, 255), part) };
-            foreach (var child in part.Children)
-            {
-                if (child != null && child.Definition != null)
-                {
-                    result.AddRange(GeneratePartSprite(child));
-                }
-            }
-
-            return result.ToArray();
-        }
-
-        private Dictionary<Agent, Texture2D[]> GenerateAgentSprites(List<Agent> agents)
-        {
-            Dictionary < Agent, Texture2D[]> result = new Dictionary<Agent, Texture2D[]> ();
-
-            foreach (var agent in agents)
-            {
-                if (agent.GetType() == typeof(Critter))
-                {
-                    result.Add(agent, GenerateCritterSprite((Critter)agent));
-                }
-                else result.Add(agent, GenerateAgentSprite(agent));
-            }
-
-            return result;
-        }
-
-        private class PartTexture : Texture2D
-        {
-            public Part Part { get; private set; }
-            public PartTexture(GraphicsDevice graphicsDevice, int width, int height, Part part) : base(graphicsDevice, width, height)
-            {
-                Part = part;
             }
         }
 
