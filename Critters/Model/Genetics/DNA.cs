@@ -26,14 +26,90 @@ namespace Model.Genetics
             Code = getNewEmptyGene('B');
         }
 
-        public void GenerativeEvolve()
+        public void Evolve()
         {
+            Random rand = new Random();
 
+            //TODO - make app settings
+            int x = rand.Next(100);
+            if (x < 20 && Code.Length < GlobalConfig.degenerationThrshold)
+            {
+                DeGenerativeEvolve();
+            }
+            else if (x < 70)
+            {
+                ReGenerativeEvolve();
+            }
+            else
+            {
+                GenerativeEvolve();
+            }
         }
 
-        public void DegenerativeEvolve()
+        protected void GenerativeEvolve()
         {
+            Random rand = new Random();
 
+            //Todo - make app settings for randomness AND OPTIMISE, random repeat of loop
+            int tries = 20;
+            while (tries > 0)
+            {
+                tries--;
+
+                int target = rand.Next(Code.Length);
+                if (Code[target] != '0') continue;
+
+                string temp = Code.Substring(0, target);
+                int depth = temp.Where(x => x == '(').Count() - temp.Where(x => x == ')').Count();
+
+                float step = 10;
+                float limit = 10;
+                for (int i = 0; i < depth; i++)
+                {
+                    limit += step;
+                    step *= 0.8f;
+                }
+
+                if (rand.Next(100) < limit) continue;
+
+                addGene(target, PartDef.GetRandomGene());
+                return;
+            }
+        }
+
+        protected void ReGenerativeEvolve()
+        {
+            Random rand = new Random();
+
+            int tries = 20;
+            while (tries > 0)
+            {
+                tries--;
+                int target = rand.Next(Code.Length);
+                if ((PartDef.EmptyGeneChar + "()").Contains(Code[target])) continue;
+
+                swapGene(target, PartDef.GetRandomGene());
+                return;
+            }
+        }
+
+        protected void DeGenerativeEvolve()
+        {
+            Random rand = new Random();
+
+            int tries = 20;
+            while (tries > 0)
+            {
+                tries--;
+                int target = rand.Next(Code.Length);
+                if ((PartDef.EmptyGeneChar + "()").Contains(Code[target])) continue;
+
+                try
+                {
+                    removeGene(target);
+                } catch (Exception ex) { }
+                return;
+            }
         }
 
         //Replace empty gene

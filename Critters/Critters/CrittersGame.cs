@@ -10,6 +10,7 @@ using Model.Objects;
 using Model.Genetics.Parts;
 using Model.Genetics.Parts.Base;
 using Critters.Drawing;
+using Model.Genetics;
 
 namespace Critters
 {
@@ -92,12 +93,15 @@ namespace Critters
             var result = new List<Agent>();
 
             Random r = new Random();
-            for (int i = 0; i < GlobalConfig.baseAgentCount; i++)
+            for (int i = 0; i < GlobalConfig.baseCritterCount; i++)
             {
+                DNA dna = new DNA();
+                for (int j = 0; j < GlobalConfig.baseEvolution; j++) dna.Evolve();
                 result.Add(new Critter(world, 
                         new Vector2<int>(r.Next() % world.Width, r.Next() % world.Height),
                         new Vector2<int>(GlobalConfig.baseAgentSize, GlobalConfig.baseAgentSize),
-                        new Vector2<float>()
+                        new Vector2<float>(),
+                        dna
                     ));
             }
 

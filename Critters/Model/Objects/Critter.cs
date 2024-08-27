@@ -109,7 +109,8 @@ namespace Model.Objects
 
         private Part generatePartFromDnaSegment(string segment, Part? parent)
         {
-            if (!PartDef.PartList.ContainsKey(segment[0]) || segment[segment.Length - 1] != ')') throw new InvalidDataException("Invalid DNA segment");
+            if (!PartDef.PartList.ContainsKey(segment[0]) || segment[segment.Length - 1] != ')') 
+                throw new InvalidDataException("Invalid DNA segment");
 
             //Get base part of current segment
             Part result = new Part(PartDef.PartList[segment[0]], parent);
@@ -136,7 +137,8 @@ namespace Model.Objects
                         endindex += 1;
                     }
                     //Recur to add child
-                    current = generatePartFromDnaSegment(segment.Substring(currentIndex, endindex - currentIndex + 1), result);
+                    string subSegment = segment.Substring(currentIndex, endindex - currentIndex + 1);
+                    current = generatePartFromDnaSegment(subSegment, result);
                     result.Children[currentChild] = current;
                     currentIndex = endindex;
                 }

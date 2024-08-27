@@ -32,6 +32,11 @@ namespace Model.Genetics.Parts.Base
             UpdateEffect = updateEffect;
         }
 
+        public static char GetRandomGene()
+        {
+            return PartList.Keys.Where(x => x != EmptyGeneChar).ToList()[new Random().Next(PartList.Count - 1)];
+        }
+
         public const char EmptyGeneChar = '0';
         public static readonly Dictionary<char, PartDef> PartList = new Dictionary<char, PartDef>
         {
