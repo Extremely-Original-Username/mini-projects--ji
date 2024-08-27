@@ -115,22 +115,15 @@ namespace Critters
             foreach (var agent in agents)
             {
                 if (agent.GetType() == typeof(Critter))
-                { //TODO: change this to use critter.getpartposition
-                    _spriteBatch.Draw(agentSprites[agent][0],
-                        new Rectangle(
-                            Convert.ToInt32(agent.Position.X) - Convert.ToInt32(agent.Size.X / 2), Convert.ToInt32(agent.Position.Y) - Convert.ToInt32(agent.Size.Y / 2),
-                            Convert.ToInt32(agent.Size.X), Convert.ToInt32(agent.Size.Y)
-                            ),
-                        Color.White);
-                    for (int i = 1; i < agentSprites[agent].Length; i++)
+                {
+                    for (int i = 0; i < agentSprites[agent].Length; i++)
                     {
-                        var partOffset = PartDef.GetRelativePartPosition(i - 1, GlobalConfig.maxChildParts, agent.FacingAngle.toAngle());
-                        partOffset.X *= GlobalConfig.baseAgentSize / 1.5;
-                        partOffset.Y *= GlobalConfig.baseAgentSize / 1.5;
+                        var currentSprite = (PartTexture)agentSprites[agent][i];
+                        var partPosition = ((Critter)agent).getPartPosition(currentSprite.Part);
 
-                        _spriteBatch.Draw(agentSprites[agent][i],
+                        _spriteBatch.Draw(currentSprite,
                         new Rectangle(
-                            Convert.ToInt32(agent.Position.X) - Convert.ToInt32(agent.Size.X / 2) + (int)partOffset.X, Convert.ToInt32(agent.Position.Y) - Convert.ToInt32(agent.Size.Y / 2) + (int)partOffset.Y,
+                            Convert.ToInt32(partPosition.X) - Convert.ToInt32(agent.Size.X / 2), Convert.ToInt32(partPosition.Y) - Convert.ToInt32(agent.Size.Y / 2),
                             Convert.ToInt32(agent.Size.X), Convert.ToInt32(agent.Size.Y)
                             ),
                         Color.White);
