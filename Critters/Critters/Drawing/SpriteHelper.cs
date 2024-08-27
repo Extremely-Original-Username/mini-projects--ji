@@ -15,6 +15,7 @@ namespace Critters.Drawing
     public class SpriteHelper
     {
         GraphicsDevice GraphicsDevice;
+
         public SpriteHelper(GraphicsDevice graphicsDevice)
         {
             GraphicsDevice = graphicsDevice;
@@ -114,7 +115,10 @@ namespace Critters.Drawing
         //Recursive function to generate critter from base part
         private Texture2D[] GeneratePartSprite(Part part)
         {
-            List<Texture2D> result = new List<Texture2D>() { GenerateCircleSprite(part.Size, part.Definition.Name == "Photosynthesis" ? new Color(100, 255, 100, 255) : new Color(255, 255, 255, 255), part) };
+            List<Texture2D> result;
+            Color color = PartColors.ContainsKey(part.Definition.Id)? PartColors[part.Definition.Id] : Color.Magenta;
+
+            result = new List<Texture2D>() { GenerateCircleSprite(part.Size, color, part) };
             foreach (var child in part.Children)
             {
                 if (child != null && child.Definition != null)
@@ -125,7 +129,6 @@ namespace Critters.Drawing
 
             return result.ToArray();
         }
-
         public class PartTexture : Texture2D
         {
             public Part Part { get; private set; }
@@ -135,5 +138,11 @@ namespace Critters.Drawing
             }
         }
 
+        private static Dictionary<char, Color> PartColors = new Dictionary<char, Color>()
+        {
+            { '0', Color.Magenta },
+            { 'B', Color.White},
+            { 'P', Color.Green}
+        };
     }
 }

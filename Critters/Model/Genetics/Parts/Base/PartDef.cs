@@ -14,6 +14,7 @@ namespace Model.Genetics.Parts.Base
 {
     public class PartDef
     {
+        public char Id { get; }
         public string Name { get; }
         public string Description { get; }
         public float MetabolicLoad { get; }
@@ -21,8 +22,9 @@ namespace Model.Genetics.Parts.Base
         public Action<Part, Critter> PresentEffect { get; }
         public Action<Part, Critter> UpdateEffect { get; }
 
-        public PartDef(string name, string description, float metabolicLoad, Action<Part, Critter> presentEffect, Action<Part, Critter> updateEffect)
+        public PartDef(char id, string name, string description, float metabolicLoad, Action<Part, Critter> presentEffect, Action<Part, Critter> updateEffect)
         {
+            Id = id;
             Name = name;
             Description = description;
             MetabolicLoad = metabolicLoad;
@@ -35,6 +37,7 @@ namespace Model.Genetics.Parts.Base
             { '0', null },
 
             { 'B', new PartDef(
+                'B',
                 "Body",
                 "Stores energy",
                 1,
@@ -43,6 +46,7 @@ namespace Model.Genetics.Parts.Base
                 )},
 
             { 'P', new PartDef(
+                'P',
                 "Photosynthesis",
                 "Generates energy in bright areas",
                 0.5f,

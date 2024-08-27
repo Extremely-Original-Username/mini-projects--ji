@@ -29,7 +29,6 @@ namespace Critters
         public CrittersGame()
         {
             _graphics = new GraphicsDeviceManager(this);
-            spriteHelper = new SpriteHelper(GraphicsDevice);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             Window.AllowUserResizing = true;
@@ -48,6 +47,7 @@ namespace Critters
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteHelper = new SpriteHelper(GraphicsDevice);
 
             world = new World(GlobalConfig.arenaWidth, GlobalConfig.arenaHeight);
             worldSprite = spriteHelper.GenerateWorldSprite(world);
