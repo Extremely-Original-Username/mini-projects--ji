@@ -32,7 +32,7 @@ namespace Model.Genetics
 
             //TODO - make app settings
             int x = rand.Next(100);
-            if (x < 20 && Code.Length < GlobalConfig.degenerationThrshold)
+            if (x < 20 && Code.Length > GlobalConfig.degenerationThrshold)
             {
                 DeGenerativeEvolve();
             }
@@ -123,8 +123,12 @@ namespace Model.Genetics
         //Remove a gene with no children
         protected void removeGene(int location)
         {
-            if (Code.Substring(location, 3 + MaxChildren) != getNewEmptyGene(Code[location]))
-                throw new InvalidDataException("Gene must not be empty and have no children to be removed");
+            if (
+                (Code.Substring(location, 3 + MaxChildren) != getNewEmptyGene(Code[location]))
+                ||
+                (Code.Length <= getNewEmptyGene(PartDef.EmptyGeneChar).Length)
+                )
+                throw new InvalidDataException("Gene must not be empty, not be the only gene and have no children to be removed");
 
             Code = Code.Remove(location, 3 + MaxChildren);
             Code = Code.Insert(location, PartDef.EmptyGeneChar.ToString());

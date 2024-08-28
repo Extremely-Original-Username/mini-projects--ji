@@ -34,7 +34,12 @@ namespace Model.Genetics.Parts.Base
 
         public static char GetRandomGene()
         {
-            return PartList.Keys.Where(x => x != EmptyGeneChar).ToList()[new Random().Next(PartList.Count - 1)];
+            var result = PartList.Keys.Where(x => x != EmptyGeneChar).ToList()[new Random().Next(PartList.Count - 1)];
+            if (result == '0')
+            {
+                var test = true;
+            }
+            return result;
         }
 
         public const char EmptyGeneChar = '0';

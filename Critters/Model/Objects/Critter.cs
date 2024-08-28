@@ -102,6 +102,10 @@ namespace Model.Objects
 
         private Part ParseDNA(DNA dna)
         {
+            if (dna.Code == "0")
+            {
+                bool test = true;
+            }
             Part result = generatePartFromDnaSegment(dna.Code, null);
 
             return result;
@@ -109,6 +113,10 @@ namespace Model.Objects
 
         private Part generatePartFromDnaSegment(string segment, Part? parent)
         {
+            if (segment == "0")
+            {
+                bool test = true;
+            }
             if (!PartDef.PartList.ContainsKey(segment[0]) || segment[segment.Length - 1] != ')') 
                 throw new InvalidDataException("Invalid DNA segment");
 
@@ -138,6 +146,10 @@ namespace Model.Objects
                     }
                     //Recur to add child
                     string subSegment = segment.Substring(currentIndex, endindex - currentIndex + 1);
+                    if (subSegment == "0")
+                    {
+                        bool test = true;
+                    }
                     current = generatePartFromDnaSegment(subSegment, result);
                     result.Children[currentChild] = current;
                     currentIndex = endindex;
