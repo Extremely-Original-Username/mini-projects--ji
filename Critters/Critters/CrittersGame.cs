@@ -20,7 +20,6 @@ namespace Critters
         private SpriteBatch _spriteBatch;
 
         private World world;
-        private List<Agent> agents;
 
         private Texture2D worldSprite;
         private Dictionary<Agent, Texture2D[]> agentSprites;
@@ -53,8 +52,8 @@ namespace Critters
             world = new World(GlobalConfig.arenaWidth, GlobalConfig.arenaHeight);
             worldSprite = spriteHelper.GenerateWorldSprite(world);
 
-            agents = getStartingAgents();
-            agentSprites = spriteHelper.GenerateAgentSprites(agents);
+            world.Agents = getStartingAgents();
+            agentSprites = spriteHelper.GenerateAgentSprites(world.Agents);
         }
 
         protected override void Update(GameTime gameTime)
@@ -62,10 +61,7 @@ namespace Critters
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            foreach (Agent agent in agents)
-            {
-                agent.OnUpdate();
-            }
+            world.Update();
 
             base.Update(gameTime);
         }
@@ -120,7 +116,7 @@ namespace Critters
 
         private void addAgentsToSpriteBatch()
         {
-            foreach (var agent in agents)
+            foreach (var agent in world.Agents)
             {
                 if (agent.GetType() == typeof(Critter))
                 {

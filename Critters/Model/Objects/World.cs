@@ -16,12 +16,22 @@ namespace Model.Objects
 
         public float[,] lightMap { get; set; }
 
+        public List<Agent> Agents { get; set; }
+
         public World(int width, int height)
         {
             Width = width;
             Height = height;
 
             GenerateLightMap();
+        }
+
+        public void Update()
+        {
+            foreach (Agent agent in Agents)
+            {
+                agent.OnUpdate();
+            }
         }
 
         private void GenerateLightMap()
