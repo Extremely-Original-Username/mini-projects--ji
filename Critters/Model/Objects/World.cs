@@ -16,7 +16,13 @@ namespace Model.Objects
 
         public float[,] lightMap { get; set; }
 
-        public List<Agent> Agents { get; set; }
+        private List<Agent> Agents { get; set; } = new List<Agent>();
+
+        public delegate void OnUpdateDelegate();
+        public event OnUpdateDelegate OnUpdate;
+
+        public delegate void OnAgentCreatedDelegate(Agent agent);
+        public event OnAgentCreatedDelegate OnAgentCreated;
 
         public World(int width, int height)
         {
@@ -28,9 +34,26 @@ namespace Model.Objects
 
         public void Update()
         {
+            if (OnUpdate != null)
+            {
+                OnUpdate();
+            }
+
             foreach (Agent agent in Agents)
             {
                 agent.OnUpdate();
+            }
+        }
+
+        public Agent[] getAgents() { return Agents.ToArray(); }
+
+        public void addAgent(Agent agent)
+        {
+            Agents.Add(agent);
+
+            if (OnAgentCreated != null)
+            {
+                OnAgentCreated(agent);
             }
         }
 

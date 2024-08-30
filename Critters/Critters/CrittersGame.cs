@@ -22,7 +22,7 @@ namespace Critters
         private World world;
 
         private Texture2D worldSprite;
-        private Dictionary<Agent, Texture2D[]> agentSprites;
+        private Dictionary<Agent, Texture2D[]> agentSprites = new Dictionary<Agent, Texture2D[]>();
 
         private SpriteHelper spriteHelper;
 
@@ -52,8 +52,13 @@ namespace Critters
             world = new World(GlobalConfig.arenaWidth, GlobalConfig.arenaHeight);
             worldSprite = spriteHelper.GenerateWorldSprite(world);
 
-            world.Agents = getStartingAgents();
-            agentSprites = spriteHelper.GenerateAgentSprites(world.Agents);
+            LoadEvents();
+
+            var startingAgents = getStartingAgents();
+            foreach (var agent in startingAgents)
+            {
+                world.addAgent(agent);
+            }
         }
 
         protected override void Update(GameTime gameTime)
@@ -116,7 +121,7 @@ namespace Critters
 
         private void addAgentsToSpriteBatch()
         {
-            foreach (var agent in world.Agents)
+            foreach (var agent in world.getAgents())
             {
                 if (agent.GetType() == typeof(Critter))
                 {
@@ -143,6 +148,18 @@ namespace Critters
                         Color.White);
                 }
             }
+        }
+
+        private void LoadEvents()
+        {
+            world.OnAgentCreated += (x) => {
+                if (x.GetType() == typeof(Critter))
+                {
+                    agentSprites.Add(x, spriteHelper.GenerateCritterSprite((Critter)x));
+                    return;
+                }
+                agentSprites.Add(x, spriteHelper.GenerateAgentSprite(x));
+            };
         }
 
         #endregion

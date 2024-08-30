@@ -107,7 +107,7 @@ namespace Critters.Drawing
             return new Texture2D[1] { GenerateCircleSprite(agent.Size, new Color(255, 255, 255, 255)) };
         }
 
-        private Texture2D[] GenerateCritterSprite(Critter agent)
+        public Texture2D[] GenerateCritterSprite(Critter agent)
         {
             return GeneratePartSprite(agent.BasePart);
         }
