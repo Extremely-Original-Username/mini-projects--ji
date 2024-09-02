@@ -17,13 +17,16 @@ namespace Model.Objects
         public float maxEnergy { get; set; }
         public float energy { get; set; }
         public float metabolicRate { get; set; }
-        public float reproductionThreshold = 0.7f;
+        public float reproductionThreshold = 0.9f;
+
+        private DNA Dna { get; set; }
 
         public Part BasePart { get; }
 
         public Critter(World world, Vector2<int> position, Vector2<int> size, Vector2<float> facingAngle, DNA dna = null) : base(world, position, size, facingAngle)
         {
             if (dna == null) dna = new DNA();
+            Dna = dna;
             BasePart = ParseDNA(dna);
 
             DoActionForPartAndChildren(BasePart, x =>
@@ -39,12 +42,14 @@ namespace Model.Objects
         {
             base.OnUpdate();
 
-            if (Dead) return;
+            //if (Dead) return;
+            if (Dead && new Random().Next(999) > 900) World.RemoveAgent(this); 
             //All critter bahviour below
 
             DoActionForPartAndChildren(BasePart, x => { x.Definition.UpdateEffect.Invoke(x, this); });
             metabolise();
-            if (energy > maxEnergy * reproductionThreshold) tryReproduce();
+            //if (energy > maxEnergy * reproductionThreshold) tryReproduce();
+            if (new Random().Next(999) > 990) tryReproduce();
             else if (energy <= 0) die();
 
             Move();
@@ -60,7 +65,13 @@ namespace Model.Objects
 
         private void tryReproduce()
         {
+            if (World.getAgents().Length > GlobalConfig.maxCritterCount) 
+                return;
 
+            energy = energy / 2;
+
+            Random r = new Random();
+            World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(10) - 5, this.Position.X + +r.Next(10) - 5), Size, FacingAngle, new DNA(Dna)));
         }
 
         private void die()

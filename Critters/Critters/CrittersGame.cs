@@ -68,6 +68,8 @@ namespace Critters
 
             world.Update();
 
+            Console.WriteLine("Critters: " + world.getAgents().Length);
+
             base.Update(gameTime);
         }
 
@@ -159,6 +161,11 @@ namespace Critters
                     return;
                 }
                 agentSprites.Add(x, spriteHelper.GenerateAgentSprite(x));
+            };
+
+            world.OnAgentRemoved += (x) =>
+            {
+                agentSprites.Remove(x);
             };
         }
 

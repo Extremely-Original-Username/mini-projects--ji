@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LibNoise;
+using Model.Genetics;
 
 namespace Model.Objects
 {
@@ -23,6 +24,8 @@ namespace Model.Objects
 
         public delegate void OnAgentCreatedDelegate(Agent agent);
         public event OnAgentCreatedDelegate OnAgentCreated;
+        public delegate void OnAgentRemovedDelegate(Agent agent);
+        public event OnAgentRemovedDelegate OnAgentRemoved;
 
         public World(int width, int height)
         {
@@ -39,9 +42,9 @@ namespace Model.Objects
                 OnUpdate();
             }
 
-            foreach (Agent agent in Agents)
+            for (int i = 0; i < Agents.Count; i++)
             {
-                agent.OnUpdate();
+                Agents[i].OnUpdate();
             }
         }
 
@@ -54,6 +57,16 @@ namespace Model.Objects
             if (OnAgentCreated != null)
             {
                 OnAgentCreated(agent);
+            }
+        }
+
+        public void RemoveAgent(Agent agent)
+        {
+            Agents.Remove(agent);
+
+            if (OnAgentRemoved != null)
+            {
+                OnAgentRemoved(agent);
             }
         }
 

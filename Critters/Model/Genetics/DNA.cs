@@ -13,7 +13,7 @@ namespace Model.Genetics
     public class DNA
     {
         public string Code { get; protected set; }
-        private int MaxChildren { get; }
+        public int MaxChildren { get; set; }
 
         public DNA()
         {
@@ -24,6 +24,11 @@ namespace Model.Genetics
         {
             MaxChildren = maxChildren;
             Code = getNewEmptyGene('B');
+        }
+        public DNA(DNA parentDna)
+        {
+            MaxChildren = parentDna.MaxChildren;
+            Code = parentDna.Code;
         }
 
         public void Evolve()
