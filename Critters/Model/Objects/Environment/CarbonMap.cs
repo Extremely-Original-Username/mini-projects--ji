@@ -9,7 +9,8 @@ namespace Model.Objects.Environment
 {
     public class CarbonMap
     {
-        public float[,] Map { get; set; }
+        private float[,] Map { get; set; }
+        public double totalCarbon { get; private set; } = 0;
         
         public CarbonMap(int width, int height)
         {
@@ -20,6 +21,7 @@ namespace Model.Objects.Environment
                 for (int x = 0; x < Map.GetLength(0); x++)
                 {
                     Map[x, y] = GlobalConfig.baseCarbonLevel;
+                    totalCarbon += Map[x, y];
                 }
             }
         }
@@ -40,7 +42,9 @@ namespace Model.Objects.Environment
             Map[pixelToGridSquare(x), pixelToGridSquare(y)] -= targetAmount;
             if (Map[pixelToGridSquare(x), pixelToGridSquare(y)] < 0) Map[pixelToGridSquare(x), pixelToGridSquare(y)] = 0;
 
-            return startVal - Map[pixelToGridSquare(x), pixelToGridSquare(y)];
+            var result = startVal - Map[pixelToGridSquare(x), pixelToGridSquare(y)];
+            totalCarbon -= result;
+            return result;
         }
 
         public void Diffuse()

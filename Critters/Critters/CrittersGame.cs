@@ -79,7 +79,7 @@ namespace Critters
 
             Console.WriteLine("Critters: " + world.getAgents().Length);
 
-            Window.Title = "Critters (" + world.getAgents().Count() + ")"; 
+            UpdateTitle(); 
             base.Update(gameTime);
         }
 
@@ -182,6 +182,11 @@ namespace Critters
             }
 
             overlayCooldown--;
+        }
+
+        private void UpdateTitle()
+        {
+            Window.Title = "Critters: " + world.getAgents().Count() + "   (Carbon:" + world.CarbonMap.totalCarbon + ")";
         }
 
         private void LoadEvents()
