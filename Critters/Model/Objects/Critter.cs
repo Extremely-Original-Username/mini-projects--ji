@@ -101,6 +101,24 @@ namespace Model.Objects
             Position.X += x;
             Position.Y += y;
 
+            if (Position.X > World.Width - 2)
+            {
+                Position.X = 1;
+            }
+            else if (Position.X < 1)
+            {
+                Position.X = World.Width - 2;
+            }
+
+            if (Position.Y > World.Height - 2)
+            {
+                Position.Y = 1;
+            }
+            else if (Position.Y < 1)
+            {
+                Position.Y = World.Height - 2;
+            }
+
             ValidatePosition();
         }
 
