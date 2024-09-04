@@ -11,6 +11,7 @@ using Model.Genetics.Parts;
 using Model.Genetics.Parts.Base;
 using Critters.Drawing;
 using Model.Genetics;
+using Model.Objects.Environment;
 
 namespace Critters
 {

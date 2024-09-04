@@ -1,4 +1,5 @@
 ﻿using Model.Geometry;
+using Model.Objects.Environment;
 using System;
 using System.Collections.Generic;
 using System.Linq;

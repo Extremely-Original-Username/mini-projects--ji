@@ -9,6 +9,7 @@ using System.Linq;
 using Model.Objects;
 using Model.Genetics.Parts;
 using Model.Genetics.Parts.Base;
+using Model.Objects.Environment;
 
 namespace Critters.Drawing
 {
@@ -46,7 +47,7 @@ namespace Critters.Drawing
             {
                 for (int x = 0; x < world.Width; x++)
                 {
-                    float lightLevel = world.lightMap[x, y];
+                    float lightLevel = world.LightMap.getLightLevelAt(x, y);
                     float value = 255f * lightLevel;
                     dataColors[y * world.Width + x] = new Color(
                         Convert.ToInt32(255f * lightLevel),

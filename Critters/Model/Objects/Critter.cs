@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Model.Objects.Environment;
 
 namespace Model.Objects
 {
@@ -20,6 +21,7 @@ namespace Model.Objects
         public float reproductionThreshold = 0.9f;
 
         private DNA Dna { get; set; }
+        private int PartCount { get; set; }
 
         public Part BasePart { get; }
 
@@ -27,7 +29,8 @@ namespace Model.Objects
         {
             if (dna == null) dna = new DNA();
             Dna = dna;
-            BasePart = ParseDNA(dna);
+            BasePart = ParseDNA(dna, out int temp);
+            PartCount = temp;
 
             DoActionForPartAndChildren(BasePart, x =>
             {
@@ -71,7 +74,7 @@ namespace Model.Objects
             energy = energy / 2;
 
             Random r = new Random();
-            World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(10) - 5, this.Position.X + +r.Next(10) - 5), Size, FacingAngle, new DNA(Dna)));
+            World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(20) - 10, this.Position.X + +r.Next(20) - 10), Size, new Vector2<float>(r.NextSingle(), r.NextSingle()), new DNA(Dna)));
         }
 
         private void die()
@@ -94,8 +97,8 @@ namespace Model.Objects
         private void Rotate()
         {
             Random r = new Random();
-            FacingAngle.X += ((r.Next() % 3) - 1) / 2f;
-            FacingAngle.Y += ((r.Next() % 3) - 1) / 2f;
+            FacingAngle.X += ((r.Next() % 3) - 1) / 3f;
+            FacingAngle.Y += ((r.Next() % 3) - 1) / 3f;
             FacingAngle.normalise();
         }
 
@@ -111,19 +114,21 @@ namespace Model.Objects
             }
         }
 
-        private Part ParseDNA(DNA dna)
+        private Part ParseDNA(DNA dna, out int partCount)
         {
             if (dna.Code == "0")
             {
                 bool test = true;
             }
-            Part result = generatePartFromDnaSegment(dna.Code, null);
+            partCount = 0;
+            Part result = generatePartFromDnaSegment(dna.Code, null, out partCount);
 
             return result;
         }
 
-        private Part generatePartFromDnaSegment(string segment, Part? parent)
+        private Part generatePartFromDnaSegment(string segment, Part? parent, out int count)
         {
+            count = 1;
             if (segment == "0")
             {
                 bool test = true;
@@ -161,7 +166,10 @@ namespace Model.Objects
                     {
                         bool test = true;
                     }
-                    current = generatePartFromDnaSegment(subSegment, result);
+
+                    current = generatePartFromDnaSegment(subSegment, result, out int temp);
+                    count += temp;
+
                     result.Children[currentChild] = current;
                     currentIndex = endindex;
                 }

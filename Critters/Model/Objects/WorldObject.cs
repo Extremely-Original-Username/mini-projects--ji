@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Model.Geometry;
+using Model.Objects.Environment;
 
 namespace Model.Objects
 {
