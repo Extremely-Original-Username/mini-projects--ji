@@ -38,29 +38,6 @@ namespace Critters.Drawing
             return result;
         }
 
-        public Texture2D GenerateWorldSprite(World world)
-        {
-            var result = new Texture2D(GraphicsDevice, world.Width, world.Height);
-            var dataColors = new Color[result.Width * result.Height];
-
-            for (int y = 0; y < world.Height; y++)
-            {
-                for (int x = 0; x < world.Width; x++)
-                {
-                    float lightLevel = world.LightMap.getLightLevelAt(x, y);
-                    float value = 255f * lightLevel;
-                    dataColors[y * world.Width + x] = new Color(
-                        Convert.ToInt32(255f * lightLevel),
-                        Convert.ToInt32(255f * lightLevel),
-                        Convert.ToInt32(255f * lightLevel),
-                        1000);
-                }
-            }
-
-            result.SetData(dataColors);
-            return result;
-        }
-
         //Add part parameter if associated with part
         private Texture2D GenerateCircleSprite(Vector2<int> size, Color color, Part part = null)
         {
@@ -137,6 +114,48 @@ namespace Critters.Drawing
             {
                 Part = part;
             }
+        }
+
+        public Texture2D GenerateWorldSprite(World world)
+        {
+            var result = new Texture2D(GraphicsDevice, world.Width, world.Height);
+            var dataColors = new Color[result.Width * result.Height];
+
+            for (int y = 0; y < world.Height; y++)
+            {
+                for (int x = 0; x < world.Width; x++)
+                {
+                    float lightLevel = world.LightMap.getLightLevelAt(x, y);
+                    float value = 255f * lightLevel;
+                    dataColors[y * world.Width + x] = new Color(
+                        Convert.ToInt32(255f * lightLevel),
+                        Convert.ToInt32(255f * lightLevel),
+                        Convert.ToInt32(255f * lightLevel),
+                        1000);
+                }
+            }
+
+            result.SetData(dataColors);
+            return result;
+        }
+
+        public Texture2D GenerateCarbonOverlay(World world)
+        {
+            var result = new Texture2D(GraphicsDevice, world.Width, world.Height);
+            var dataColors = new Color[result.Width * result.Height];
+
+            for (int y = 0; y < world.Height; y++)
+            {
+                for (int x = 0; x < world.Width; x++)
+                {
+                    float carbonLevel = world.CarbonMap.GetCarbonLevelAt(x, y);
+                    Color value = new Color(carbonLevel, 0, 0, 0.4f);
+                    dataColors[y * world.Width + x] = value;
+                }
+            }
+
+            result.SetData(dataColors);
+            return result;
         }
 
         private static Dictionary<char, Color> PartColors = new Dictionary<char, Color>()

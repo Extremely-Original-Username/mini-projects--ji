@@ -27,6 +27,11 @@ namespace Critters
 
         private SpriteHelper spriteHelper;
 
+        private const int overlayCooldownBase = 100;
+        private int overlayCooldown = overlayCooldownBase;
+        private bool[] overlayState = new bool[] { false };
+        private Texture2D CarbonOverlay;
+
         public CrittersGame()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -66,6 +71,9 @@ namespace Critters
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.D1))
+                overlayState[0] = true;
+            else overlayState[0] = false;
 
             world.Update();
 
@@ -83,6 +91,7 @@ namespace Critters
 
             addWorldToSpriteBatch();
             addAgentsToSpriteBatch();
+            addOverlaysToSpriteBatch();
 
             _spriteBatch.End();
 
@@ -152,6 +161,27 @@ namespace Critters
                         Color.White);
                 }
             }
+        }
+
+        private void addOverlaysToSpriteBatch()
+        {
+            if (CarbonOverlay == null || overlayCooldown <= 0)
+            {
+                CarbonOverlay = spriteHelper.GenerateCarbonOverlay(world);
+                overlayCooldown = overlayCooldownBase;
+            }
+
+            if (overlayState[0])
+            {
+                _spriteBatch.Draw(CarbonOverlay,
+                new Rectangle(
+                    0, 0,
+                    world.Width, world.Height
+                    ),
+                Color.Red);
+            }
+
+            overlayCooldown--;
         }
 
         private void LoadEvents()
