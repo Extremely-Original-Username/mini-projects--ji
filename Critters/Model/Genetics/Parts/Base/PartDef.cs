@@ -85,7 +85,7 @@ namespace Model.Genetics.Parts.Base
                 'M',
                 "Move",
                 "Moves the critter",
-                1.5f,
+                2f,
                 (p, c) => { return; },
                 (p, c) =>
                     {
@@ -101,7 +101,7 @@ namespace Model.Genetics.Parts.Base
                 'R',
                 "Rotate",
                 "Rotates the critter",
-                0.75f,
+                1.2f,
                 (p, c) => { return; },
                 (p, c) => { return;  if (c.r.Next(100) > 90) c.FacingAngle = Vector2<float>.fromAngle(Vector2<float>.toAngle(c.FacingAngle) + c.r.Next(3) - 1); }
                 )},
@@ -109,7 +109,7 @@ namespace Model.Genetics.Parts.Base
                 'F',
                 "Flagella",
                 "Randomly moves the critter",
-                0.6f,
+                1f,
                 (p, c) => { return; },
                 (p, c) => { c.Move(c.r.Next(3) - 1, c.r.Next(3) - 1); }
                 )},

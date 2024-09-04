@@ -48,6 +48,8 @@ namespace Model.Objects.Environment
             {
                 Agents[i].OnUpdate();
             }
+
+            CarbonMap.Diffuse(0.2f);
         }
 
         public Agent[] getAgents() { return Agents.ToArray(); }

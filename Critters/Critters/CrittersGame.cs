@@ -178,7 +178,7 @@ namespace Critters
                     0, 0,
                     world.Width, world.Height
                     ),
-                Color.Red);
+                Color.White);
             }
 
             overlayCooldown--;

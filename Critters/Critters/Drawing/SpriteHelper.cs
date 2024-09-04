@@ -149,8 +149,8 @@ namespace Critters.Drawing
                 for (int x = 0; x < world.Width; x++)
                 {
                     float carbonLevel = world.CarbonMap.GetCarbonLevelAt(x, y);
-                    Color value = new Color(carbonLevel, 0, 0, 0.4f);
-                    dataColors[y * world.Width + x] = value;
+                    float value = (carbonLevel / (GlobalConfig.baseCarbonLevel) * 3);
+                    dataColors[y * world.Width + x] = new Color(value, 0, 0, 0.4f);
                 }
             }
 

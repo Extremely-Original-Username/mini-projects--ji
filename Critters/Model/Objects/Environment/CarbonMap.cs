@@ -47,9 +47,43 @@ namespace Model.Objects.Environment
             return result;
         }
 
-        public void Diffuse()
+        public void Diffuse(float targetAmount)
         {
+            for (int y = 0; y < Map.GetLength(1); y++)
+            {
+                for (int x = 0; x < Map.GetLength(0); x++)
+                {
+                    try
+                    {
+                        var current = Map[x, y];
+                        if (Map[x, y + 1] < current)
+                        {
+                            transferCarbon(x, y, x, y + 1, targetAmount);
+                        }
+                        if (Map[x - 1, y] < current)
+                        {
+                            transferCarbon(x, y, x - 1, y, targetAmount);
+                        }
+                        if (Map[x + 1, y - 1] < current)
+                        {
+                            transferCarbon(x, y, x + 1, y, targetAmount);
+                        }
+                        if (Map[x, y - 1] < current)
+                        {
+                            transferCarbon(x, y, x, y - 1, targetAmount);
+                        }
+                    }
+                    catch (IndexOutOfRangeException) {}
+                }
+            }
+        }
 
+        private void transferCarbon(int x1, int y1, int x2, int y2, float maxAmount)
+        {
+            var transfer = Math.Min(maxAmount, (Map[x1, y1] - Map[x2, y2]) / 2);
+
+            Map[x1, y1] -= transfer;
+            Map[x2, y2] += transfer;
         }
 
         private int pixelToGridSquare(int pixel)
