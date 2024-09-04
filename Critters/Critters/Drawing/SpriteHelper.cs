@@ -142,8 +142,11 @@ namespace Critters.Drawing
         private static Dictionary<char, Color> PartColors = new Dictionary<char, Color>()
         {
             { '0', Color.Magenta },
-            { 'B', Color.White},
-            { 'P', Color.Green}
+            { 'B', Color.White },
+            { 'P', Color.Green },
+            { 'M', Color.DarkBlue },
+            { 'R', Color.Cyan },
+            { 'F', Color.Blue },
         };
     }
 }

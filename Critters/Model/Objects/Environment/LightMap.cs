@@ -11,6 +11,7 @@ namespace Model.Objects.Environment
     public class LightMap
     {
         public float[,] Map {  get; set; }
+        private float sinOffset;
 
         public LightMap(int Width, int Height)
         {
@@ -42,6 +43,7 @@ namespace Model.Objects.Environment
                 }
             }
         }
+        
     
         public float getLightLevelAt(int x, int y)
         {

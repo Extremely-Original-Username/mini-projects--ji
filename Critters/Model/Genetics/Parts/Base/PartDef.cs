@@ -51,7 +51,7 @@ namespace Model.Genetics.Parts.Base
                 'B',
                 "Body",
                 "Stores energy",
-                1,
+                0.75f,
                 (p, c) => { c.maxEnergy += 1 * p.Size.X * p.Size.Y; c.partEfficiency += 0.1f; },
                 (p, c) => { return; }
                 )},
@@ -65,6 +65,30 @@ namespace Model.Genetics.Parts.Base
                 (p, c) => {
                     c.energy += c.getEnergy(c.World.LightMap.getLightLevelAt(c.Position.X, c.Position.Y) * p.Size.X * p.Size.Y * c.partEfficiency);
                 }
+                )},
+            { 'M', new PartDef(
+                'M',
+                "Move",
+                "Moves the critter",
+                1f,
+                (p, c) => { return; },
+                (p, c) => { return; }
+                )},
+            { 'R', new PartDef(
+                'R',
+                "Rotate",
+                "Rotates the critter",
+                0.4f,
+                (p, c) => { return; },
+                (p, c) => { return; }
+                )},
+            { 'F', new PartDef(
+                'F',
+                "Flagella",
+                "Randomly moves the critter",
+                0.6f,
+                (p, c) => { return; },
+                (p, c) => { c.Move(c.r.Next(3) - 1, c.r.Next(3) - 1); }
                 )},
         };
 

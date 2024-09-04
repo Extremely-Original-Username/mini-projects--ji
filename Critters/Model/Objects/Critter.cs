@@ -28,6 +28,8 @@ namespace Model.Objects
 
         public Part BasePart { get; }
 
+        public Random r = new Random();
+
         public Critter(World world, Vector2<int> position, Vector2<int> size, Vector2<float> facingAngle, DNA dna = null) : base(world, position, size, facingAngle)
         {
             if (dna == null) dna = new DNA();
@@ -41,7 +43,7 @@ namespace Model.Objects
                 this.metabolicRate += x.Definition.MetabolicLoad * (float)x.Size.X * (float)x.Size.Y;
             });
 
-            energy = maxEnergy / 2 + (new Random().Next(40) - 20); //Make these parameters too
+            energy = maxEnergy / 2 + (r.Next(40) - 20); //Make these parameters too
         }
 
         public override void OnUpdate()
@@ -57,9 +59,6 @@ namespace Model.Objects
 
             if (energy > 0 && excess > 0) tryReproduce(excess);
             else if (energy <= 0) die();
-
-            Move();
-            Rotate();
         }
 
         private float metabolise()
@@ -88,12 +87,13 @@ namespace Model.Objects
         {
             //if (World.getAgents().Length > GlobalConfig.maxCritterCount) return;
 
-            Random r = new Random();
             if (!(excess / this.PartCount * 0.9 > r.Next(excessPerPartForGuarunteedReproduction))) return;
 
             energy = energy / 2;
 
-            World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(20) - 10, this.Position.X + +r.Next(20) - 10), Size, new Vector2<float>(r.NextSingle(), r.NextSingle()), new DNA(Dna)));
+            DNA childDna = new DNA(Dna);
+            childDna.Evolve();
+            World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(20) - 10, this.Position.X + +r.Next(20) - 10), Size, new Vector2<float>(r.NextSingle(), r.NextSingle()), childDna));
         }
 
         private void die()
@@ -101,24 +101,10 @@ namespace Model.Objects
             this.Dead = true;
         }
 
-        private void Move()
+        public void Move(int x, int y)
         {
-            Random r = new Random();
-            float cX = FacingAngle.X;
-            float cY = FacingAngle.Y;
-
-            int dX = r.NextSingle() < Math.Abs(cX) ? (int)Math.Clamp(cX * 1000, -1, 1) : 0;
-            int dY = r.NextSingle() < Math.Abs(cY) ? (int)Math.Clamp(cY * 1000, -1, 1) : 0;
-
-            Translate(dX, dY);
-        }
-
-        private void Rotate()
-        {
-            Random r = new Random();
-            FacingAngle.X += ((r.Next() % 3) - 1) / 3f;
-            FacingAngle.Y += ((r.Next() % 3) - 1) / 3f;
-            FacingAngle.normalise();
+            Position.X += x;
+            Position.Y += y;
         }
 
         private void DoActionForPartAndChildren(Part part, Action<Part> action)
