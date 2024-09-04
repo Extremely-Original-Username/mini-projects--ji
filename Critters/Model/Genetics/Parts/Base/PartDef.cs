@@ -74,7 +74,7 @@ namespace Model.Genetics.Parts.Base
                 "Anaerobic",
                 "Generates energy even in dark areas - very sensitive to carbon concentration",
                 0.6f,
-                (p, c) => { return; },
+                (p, c) => { c.partEfficiency -= 0.2f; },
                 (p, c) => {
                     float targetAmount = 0.75f * p.Size.X * p.Size.Y;
                     float effectiveness = MathF.Pow(c.World.CarbonMap.GetCarbonLevelAt(c.Position.X, c.Position.Y) / GlobalConfig.baseCarbonLevel, 2f);
@@ -85,17 +85,25 @@ namespace Model.Genetics.Parts.Base
                 'M',
                 "Move",
                 "Moves the critter",
-                1f,
+                1.5f,
                 (p, c) => { return; },
-                (p, c) => { return; }
+                (p, c) =>
+                    {
+                        if(c.r.Next(100) > 60 * c.partEfficiency){
+                            int dx = 0, dy = 0;
+                            if (Math.Abs(c.FacingAngle.X) > c.r.NextSingle()) dx = (int)Math.Clamp(c.FacingAngle.X * 1000, -1, 1);
+                            if (Math.Abs(c.FacingAngle.Y) > c.r.NextSingle()) dy = (int)Math.Clamp(c.FacingAngle.Y * 1000, -1, 1);
+                            c.Move(dx, dy);
+                        };
+                    }
                 )},
             { 'R', new PartDef(
                 'R',
                 "Rotate",
                 "Rotates the critter",
-                0.4f,
+                0.75f,
                 (p, c) => { return; },
-                (p, c) => { return; }
+                (p, c) => { return;  if (c.r.Next(100) > 90) c.FacingAngle = Vector2<float>.fromAngle(Vector2<float>.toAngle(c.FacingAngle) + c.r.Next(3) - 1); }
                 )},
             { 'F', new PartDef(
                 'F',

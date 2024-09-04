@@ -87,7 +87,55 @@ namespace Model.Geometry
             }
         }
 
-        public T toAngle()
+        public static T toAngle(Vector2<T> target)
+        {
+            if (typeof(T) == typeof(float))
+            {
+                float x = (float)(object)target.X;
+                float y = (float)(object)target.Y;
+
+                return (T)(Object)float.Parse(Math.Atan2(y, x).ToString());
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                double x = (double)(object)target.X;
+                double y = (double)(object)target.Y;
+
+                return (T)(Object)Math.Atan2(y, x);
+            }
+            else
+            {
+                throw new InvalidOperationException("ToAngle is only supported for float and double types");
+            }
+        }
+
+        public static Vector2<T> fromAngle(T angle)
+        {
+            if (typeof(T) == typeof(float))
+            {
+                float a = (float)(object)angle;
+
+                float x = (float)Math.Cos(a);
+                float y = (float)Math.Sin(a);
+
+                return new Vector2<T>((T)(object)x, (T)(object)y);
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                double a = (double)(object)angle;
+
+                double x = Math.Cos(a);
+                double y = Math.Sin(a);
+
+                return new Vector2<T>((T)(object)x, (T)(object)y);
+            }
+            else
+            {
+                throw new InvalidOperationException("fromAngle is only supported for float and double types");
+            }
+        }
+
+        public T fromAngle(float angle)
         {
             if (typeof(T) == typeof(float))
             {
@@ -105,7 +153,7 @@ namespace Model.Geometry
             }
             else
             {
-                throw new InvalidOperationException("ToAngle is only supported for float types");
+                throw new InvalidOperationException("FromAngle is only supported for float types");
             }
         }
 

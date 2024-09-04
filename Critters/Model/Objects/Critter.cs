@@ -88,7 +88,7 @@ namespace Model.Objects
 
             DNA childDna = new DNA(Dna);
             childDna.Evolve();
-            World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(20) - 10, this.Position.Y + r.Next(20) - 10), Size, new Vector2<float>(r.NextSingle(), r.NextSingle()), childDna));
+            World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(20) - 10, this.Position.Y + r.Next(20) - 10), Size, Vector2<float>.fromAngle(r.Next(360)), childDna));
         }
 
         private void die()
@@ -220,7 +220,7 @@ namespace Model.Objects
             Vector2<int> result = new Vector2<int>();
             if (part.Parent == null) return this.Position;
 
-            Vector2<double> relativeVector = PartDef.GetRelativePartPosition(GetIndexOfPart(part), GlobalConfig.maxChildParts, FacingAngle.toAngle());
+            Vector2<double> relativeVector = PartDef.GetRelativePartPosition(GetIndexOfPart(part), GlobalConfig.maxChildParts, Vector2<float>.toAngle(FacingAngle));
             Vector2<int> parentPos = getPartPosition(part.Parent);//TODO: Use dynamic programming to optimise this
             return new Vector2<int>(parentPos.X + (int)(relativeVector.X * GlobalConfig.partOffset), parentPos.Y + (int)(relativeVector.Y * GlobalConfig.partOffset));
         } 
