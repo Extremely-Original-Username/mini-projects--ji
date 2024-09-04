@@ -8,6 +8,9 @@ namespace Model.Config
 {
     public static class GlobalConfig
     {
+        //User Setting
+        public const int overlayUpdateFrames = 20;
+
         //Arena settings
         public const int arenaWidth = 1000;      //Size of arena in pixels
         public const int arenaHeight = 700;
