@@ -52,7 +52,7 @@ namespace Model.Genetics.Parts.Base
                 "Body",
                 "Stores energy",
                 1,
-                (p, c) => { c.maxEnergy += p.Size.X * p.Size.Y; },
+                (p, c) => { c.maxEnergy += 1 * p.Size.X * p.Size.Y; c.partEfficiency += 0.1f; },
                 (p, c) => { return; }
                 )},
 
@@ -63,7 +63,7 @@ namespace Model.Genetics.Parts.Base
                 0.5f,
                 (p, c) => { return; },
                 (p, c) => {
-                    c.energy += c.getEnergy(c.World.LightMap.getLightLevelAt(c.Position.X, c.Position.Y) * p.Size.X * p.Size.Y);
+                    c.energy += c.getEnergy(c.World.LightMap.getLightLevelAt(c.Position.X, c.Position.Y) * p.Size.X * p.Size.Y * c.partEfficiency);
                 }
                 )},
         };

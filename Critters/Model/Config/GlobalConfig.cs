@@ -24,7 +24,7 @@ namespace Model.Config
 
         //Critter settings
         public const int baseCritterCount = 100;  //Starting number of agents
-        public const int maxCritterCount = 1000;
+        //public const int maxCritterCount = 1000;
         public const int baseEvolution = 10;  //Starting number of gene changes
         public const int degenerationThrshold = 18;
         public const int maxChildParts = 6; //Number of parts per part, including base

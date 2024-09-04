@@ -18,7 +18,10 @@ namespace Model.Objects
         public float maxEnergy { get; set; }
         public float energy { get; set; }
         public float metabolicRate { get; set; }
+        public float partEfficiency = 1f;
+
         public float reproductionThreshold = 0.9f;
+        public int excessPerPartForGuarunteedReproduction = 200;
 
         private DNA Dna { get; set; }
         private int PartCount { get; set; }
@@ -49,25 +52,30 @@ namespace Model.Objects
             if (Dead && new Random().Next(999) > 900) World.RemoveAgent(this);
 
             //All critter bahviour below
-            metabolise();
-            DoActionForPartAndChildren(BasePart, x => { x.Definition.UpdateEffect.Invoke(x, this); });
+            var excess = metabolise();
+            DoActionForPartAndChildren(BasePart, x => { x.Definition.UpdateEffect.Invoke(x, this); }); //MUST be done first
 
-            //if (energy > maxEnergy * reproductionThreshold) tryReproduce();
-            if (new Random().Next(999) > 990) tryReproduce();
+            if (energy > 0 && excess > 0) tryReproduce(excess);
             else if (energy <= 0) die();
 
             Move();
             Rotate();
         }
 
-        private void metabolise()
+        private float metabolise()
         {
-            if(energy > maxEnergy) energy = maxEnergy;
+            float result = 0;
+            if(energy > maxEnergy * reproductionThreshold)
+            {
+                result = energy - maxEnergy * reproductionThreshold;
+                if (energy > maxEnergy) energy = maxEnergy;
+            }
 
             energy -= metabolicRate / 100;
             var temp1 = World.CarbonMap.GetCarbonLevelAt(Position.X, Position.Y);
             World.CarbonMap.TryTakeCarbonAmountAt(Position.X, Position.Y, -(metabolicRate / 100));
             var temp2 = World.CarbonMap.GetCarbonLevelAt(Position.X, Position.Y);
+            return result;
         }
 
         public float getEnergy(float targetAmount)
@@ -76,14 +84,15 @@ namespace Model.Objects
             return World.CarbonMap.TryTakeCarbonAmountAt(Position.X, Position.Y, targetAmount * effectiveness);
         }
 
-        private void tryReproduce()
+        private void tryReproduce(float excess)
         {
-            if (World.getAgents().Length > GlobalConfig.maxCritterCount) 
-                return;
+            //if (World.getAgents().Length > GlobalConfig.maxCritterCount) return;
+
+            Random r = new Random();
+            if (!(excess / this.PartCount * 0.9 > r.Next(excessPerPartForGuarunteedReproduction))) return;
 
             energy = energy / 2;
 
-            Random r = new Random();
             World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(20) - 10, this.Position.X + +r.Next(20) - 10), Size, new Vector2<float>(r.NextSingle(), r.NextSingle()), new DNA(Dna)));
         }
 
