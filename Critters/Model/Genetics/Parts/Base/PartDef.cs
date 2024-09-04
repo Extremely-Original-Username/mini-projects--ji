@@ -63,7 +63,7 @@ namespace Model.Genetics.Parts.Base
                 0.5f,
                 (p, c) => { return; },
                 (p, c) => {
-                    c.energy += c.World.LightMap.getLightLevelAt(c.Position.X, c.Position.Y) * p.Size.X * p.Size.Y;
+                    c.energy += c.getEnergy(c.World.LightMap.getLightLevelAt(c.Position.X, c.Position.Y) * p.Size.X * p.Size.Y);
                 }
                 )},
         };

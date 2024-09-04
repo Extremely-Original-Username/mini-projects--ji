@@ -16,6 +16,9 @@ namespace Model.Config
         public const int shadowNoiseScale = 400;
         public const float shadowEffectScale = 1.6f;    //Multiplier on shadow perlin map subtraction
 
+        public const int carbonGridSquareSize = 20;
+        public const float baseCarbonLevel = 100f;
+
         //Agent settings
         public const int baseAgentSize = 10;    //Default size of agents in pixels
 

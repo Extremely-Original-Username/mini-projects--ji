@@ -46,11 +46,12 @@ namespace Model.Objects
             base.OnUpdate();
 
             //if (Dead) return;
-            if (Dead && new Random().Next(999) > 900) World.RemoveAgent(this); 
-            //All critter bahviour below
+            if (Dead && new Random().Next(999) > 900) World.RemoveAgent(this);
 
-            DoActionForPartAndChildren(BasePart, x => { x.Definition.UpdateEffect.Invoke(x, this); });
+            //All critter bahviour below
             metabolise();
+            DoActionForPartAndChildren(BasePart, x => { x.Definition.UpdateEffect.Invoke(x, this); });
+
             //if (energy > maxEnergy * reproductionThreshold) tryReproduce();
             if (new Random().Next(999) > 990) tryReproduce();
             else if (energy <= 0) die();
@@ -64,6 +65,15 @@ namespace Model.Objects
             if(energy > maxEnergy) energy = maxEnergy;
 
             energy -= metabolicRate / 100;
+            var temp1 = World.CarbonMap.GetCarbonLevelAt(Position.X, Position.Y);
+            World.CarbonMap.TryTakeCarbonAmountAt(Position.X, Position.Y, -(metabolicRate / 100));
+            var temp2 = World.CarbonMap.GetCarbonLevelAt(Position.X, Position.Y);
+        }
+
+        public float getEnergy(float targetAmount)
+        {
+            float effectiveness = World.CarbonMap.GetCarbonLevelAt(Position.X, Position.Y) / GlobalConfig.baseCarbonLevel;
+            return World.CarbonMap.TryTakeCarbonAmountAt(Position.X, Position.Y, targetAmount * effectiveness);
         }
 
         private void tryReproduce()
