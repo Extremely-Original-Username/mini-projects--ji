@@ -56,24 +56,24 @@ namespace Model.Objects.Environment
                     try
                     {
                         var current = Map[x, y];
-                        if (Map[x, y + 1] < current)
+                        if (y + 1 < Map.GetLength(1) - 1 && Map[x, y + 1] < current)
                         {
                             transferCarbon(x, y, x, y + 1, targetAmount);
                         }
-                        if (Map[x - 1, y] < current)
+                        if (x - 1 >= 0 && Map[x - 1, y] < current)
                         {
                             transferCarbon(x, y, x - 1, y, targetAmount);
                         }
-                        if (Map[x + 1, y - 1] < current)
+                        if (x + 1 < Map.GetLength(0) - 1 && Map[x + 1, y] < current)
                         {
                             transferCarbon(x, y, x + 1, y, targetAmount);
                         }
-                        if (Map[x, y - 1] < current)
+                        if (y - 1 >= 0 && Map[x, y - 1] < current)
                         {
                             transferCarbon(x, y, x, y - 1, targetAmount);
                         }
                     }
-                    catch (IndexOutOfRangeException) {}
+                    catch (IndexOutOfRangeException e) {  }
                 }
             }
         }

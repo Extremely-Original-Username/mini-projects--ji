@@ -129,8 +129,8 @@ namespace Critters.Drawing
                     float value = 255f * lightLevel;
                     dataColors[y * world.Width + x] = new Color(
                         Convert.ToInt32(255f * lightLevel),
-                        Convert.ToInt32(255f * lightLevel),
-                        Convert.ToInt32(255f * lightLevel),
+                        Convert.ToInt32(235f * lightLevel),
+                        Convert.ToInt32(225f * lightLevel),
                         1000);
                 }
             }

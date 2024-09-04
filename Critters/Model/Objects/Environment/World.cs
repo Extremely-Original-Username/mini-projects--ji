@@ -49,7 +49,7 @@ namespace Model.Objects.Environment
                 Agents[i].OnUpdate();
             }
 
-            CarbonMap.Diffuse(0.2f);
+            CarbonMap.Diffuse(0.02f);
         }
 
         public Agent[] getAgents() { return Agents.ToArray(); }

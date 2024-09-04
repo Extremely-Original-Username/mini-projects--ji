@@ -27,7 +27,7 @@ namespace Critters
 
         private SpriteHelper spriteHelper;
 
-        private const int overlayCooldownBase = 100;
+        private const int overlayCooldownBase = 20;
         private int overlayCooldown = overlayCooldownBase;
         private bool[] overlayState = new bool[] { false };
         private Texture2D CarbonOverlay;
@@ -129,7 +129,7 @@ namespace Critters
                     0, 0,
                     world.Width, world.Height
                     ),
-                Color.White * world.LightMap.GetCurrentTimeModifier());
+                Color.White * (world.LightMap.GetCurrentTimeModifier() + 0.1f));
         }
 
         private void addAgentsToSpriteBatch()
