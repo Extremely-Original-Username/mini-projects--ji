@@ -163,6 +163,7 @@ namespace Critters.Drawing
             { '0', Color.Magenta },
             { 'B', Color.White },
             { 'P', Color.Green },
+            { 'A', Color.DarkRed },
             { 'M', Color.DarkBlue },
             { 'R', Color.Cyan },
             { 'F', Color.Blue },

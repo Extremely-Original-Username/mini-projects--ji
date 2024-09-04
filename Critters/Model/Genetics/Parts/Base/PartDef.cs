@@ -7,6 +7,7 @@ using Model.Geometry;
 using System.Text;
 using System.Threading.Tasks;
 using Model.Config;
+using Model.Objects.Environment;
 
 
 
@@ -63,7 +64,21 @@ namespace Model.Genetics.Parts.Base
                 0.5f,
                 (p, c) => { return; },
                 (p, c) => {
-                    c.energy += c.getEnergy(c.World.LightMap.getLightLevelAt(c.Position.X, c.Position.Y) * p.Size.X * p.Size.Y * c.partEfficiency);
+                    float targetAmount = c.World.LightMap.getLightLevelAt(c.Position.X, c.Position.Y) * p.Size.X * p.Size.Y * c.partEfficiency;
+                    float effectiveness = c.World.CarbonMap.GetCarbonLevelAt(c.Position.X, c.Position.Y) / GlobalConfig.baseCarbonLevel;
+                    c.energy += c.World.CarbonMap.TryTakeCarbonAmountAt(c.Position.X, c.Position.Y, targetAmount * effectiveness);;
+                }
+                )},
+            { 'A', new PartDef(
+                'A',
+                "Anaerobic",
+                "Generates energy even in dark areas - very sensitive to carbon concentration",
+                0.6f,
+                (p, c) => { return; },
+                (p, c) => {
+                    float targetAmount = 0.75f * p.Size.X * p.Size.Y;
+                    float effectiveness = MathF.Pow(c.World.CarbonMap.GetCarbonLevelAt(c.Position.X, c.Position.Y) / GlobalConfig.baseCarbonLevel, 2f);
+                    c.energy += c.World.CarbonMap.TryTakeCarbonAmountAt(c.Position.X, c.Position.Y, targetAmount * effectiveness);;
                 }
                 )},
             { 'M', new PartDef(

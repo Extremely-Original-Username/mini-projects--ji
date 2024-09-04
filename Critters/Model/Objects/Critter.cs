@@ -70,17 +70,12 @@ namespace Model.Objects
                 if (energy > maxEnergy) energy = maxEnergy;
             }
 
-            energy -= metabolicRate / 100;
+            var energyLoss = metabolicRate / 100;
+            energy -= energyLoss;
             var temp1 = World.CarbonMap.GetCarbonLevelAt(Position.X, Position.Y);
-            World.CarbonMap.TryTakeCarbonAmountAt(Position.X, Position.Y, -(metabolicRate / 100));
+            World.CarbonMap.TryTakeCarbonAmountAt(Position.X, Position.Y, -(energyLoss));
             var temp2 = World.CarbonMap.GetCarbonLevelAt(Position.X, Position.Y);
             return result;
-        }
-
-        public float getEnergy(float targetAmount)
-        {
-            float effectiveness = World.CarbonMap.GetCarbonLevelAt(Position.X, Position.Y) / GlobalConfig.baseCarbonLevel;
-            return World.CarbonMap.TryTakeCarbonAmountAt(Position.X, Position.Y, targetAmount * effectiveness);
         }
 
         private void tryReproduce(float excess)
