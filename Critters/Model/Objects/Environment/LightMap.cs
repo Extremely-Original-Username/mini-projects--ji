@@ -49,7 +49,14 @@ namespace Model.Objects.Environment
             if (y < 0 || y > Map.GetLength(1) - 1) DebugHelper.PrintWarning("LightMap.GetLightLevel", "Y value is outwith acceptable range of 0-" + (Map.GetLength(1) - 1));
 
             return Map[Math.Clamp(x, 0, Map.GetLength(0) - 1),
-                        Math.Clamp(y, 0, Map.GetLength(1) - 1)];
+                        Math.Clamp(y, 0, Map.GetLength(1) - 1)] * GetCurrentTimeModifier();
+        }
+
+        public float GetCurrentTimeModifier()
+        {
+            float second = ((float)DateTime.Now.Second + (((float)DateTime.Now.Millisecond) / 1000));
+            var result = MathF.Max(0.1f, MathF.Sin(second / (float)Math.PI / 6f));
+            return result;
         }
     }
 }

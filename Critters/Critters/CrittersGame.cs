@@ -71,12 +71,13 @@ namespace Critters
 
             Console.WriteLine("Critters: " + world.getAgents().Length);
 
+            Window.Title = "Critters (" + world.getAgents().Count() + ")"; 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DarkGray);
+            GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin();
 
@@ -119,7 +120,7 @@ namespace Critters
                     0, 0,
                     world.Width, world.Height
                     ),
-                Color.White);
+                Color.White * world.LightMap.GetCurrentTimeModifier());
         }
 
         private void addAgentsToSpriteBatch()
