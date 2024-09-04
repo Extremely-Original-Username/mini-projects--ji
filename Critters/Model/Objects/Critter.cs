@@ -88,7 +88,7 @@ namespace Model.Objects
 
             DNA childDna = new DNA(Dna);
             childDna.Evolve();
-            World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(20) - 10, this.Position.X + +r.Next(20) - 10), Size, new Vector2<float>(r.NextSingle(), r.NextSingle()), childDna));
+            World.addAgent(new Critter(World, new Vector2<int>(this.Position.X + r.Next(20) - 10, this.Position.Y + r.Next(20) - 10), Size, new Vector2<float>(r.NextSingle(), r.NextSingle()), childDna));
         }
 
         private void die()
@@ -100,6 +100,8 @@ namespace Model.Objects
         {
             Position.X += x;
             Position.Y += y;
+
+            ValidatePosition();
         }
 
         private void DoActionForPartAndChildren(Part part, Action<Part> action)

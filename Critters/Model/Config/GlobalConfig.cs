@@ -9,8 +9,8 @@ namespace Model.Config
     public static class GlobalConfig
     {
         //Arena settings
-        public const int arenaWidth = 800;      //Size of arena in pixels
-        public const int arenaHeight = 800;
+        public const int arenaWidth = 1000;      //Size of arena in pixels
+        public const int arenaHeight = 700;
 
         public const int lightNoiseScale = 300;         //Scales of the perlin noise
         public const int shadowNoiseScale = 400;

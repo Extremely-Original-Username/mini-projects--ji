@@ -62,9 +62,9 @@ namespace Model.Objects.Environment
             if (pixelToGridSquare(x) < 0 || pixelToGridSquare(x) > Map.GetLength(0) - 1)
             {
                 DebugHelper.PrintWarning("CarbonMap", "X value is outwith acceptable range of 0-" + (Map.GetLength(0) - 1));
-                x = Math.Clamp(x, 0, GlobalConfig.carbonGridSquareSize * Map.GetLength(1) - 1);
+                x = Math.Clamp(x, 0, GlobalConfig.carbonGridSquareSize * Map.GetLength(0) - 1);
             }
-            if (pixelToGridSquare(y) < 0 || pixelToGridSquare(y) > Map.GetLength(0) - 1)
+            if (pixelToGridSquare(y) < 0 || pixelToGridSquare(y) > Map.GetLength(1) - 1)
             {
                 DebugHelper.PrintWarning("CarbonMap", "Y value is outwith acceptable range of 0-" + (Map.GetLength(1) - 1));
                 y = Math.Clamp(y, 0, GlobalConfig.carbonGridSquareSize * Map.GetLength(1) - 1);

@@ -39,7 +39,7 @@ namespace Model.Objects.Environment
                         - reductionMap.GetValue(x / altScale, y / altScale, rand.NextSingle() / altScale) * GlobalConfig.shadowEffectScale;
                     noiseVal = Math.Clamp((noiseVal + 1f) / 2f, 0, 1);
 
-                    Map[y, x] = noiseVal;
+                    Map[x, y] = noiseVal;
                 }
             }
         }
