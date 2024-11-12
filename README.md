@@ -11,7 +11,7 @@ A simple system for rendering basic 2D cellular automatons, not worked on in a w
 ## UrbDevSim
 Undeveloped
 
-##Redundant/Abandoned
+## Redundant/Abandoned
 ### ~~EvoSim~~
 This became critters
 
