@@ -1,5 +1,6 @@
 # A dump for my small projects.
-No promises that any of these work, will remain working, or have even been implemented. Feel free to fork!
+No promises that any of these work, will remain working, or have even been implemented. 
+Over time I will be stabalising all of the projects here so it may be short-lived!
 
 ### ~~Critters~~
 ~~This is one of the more developed projects in this repository that simulates evolution through simple agents - I was also trying a new rendering framework for this. Works well and should be stable as of writing!~~
