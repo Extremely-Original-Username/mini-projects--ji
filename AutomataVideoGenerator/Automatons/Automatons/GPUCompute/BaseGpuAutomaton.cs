@@ -83,13 +83,13 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
             int width = texture.Width;
             int height = texture.Height;
 
-            int[,] startingMap = new int[width, height];
+            int[,] startingMap = new int[height, width]; //This is also flipped due to issues with the texture field's dimensions being flipped.
 
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    startingMap[x, y] = new Random().Next() % 2;
+                    startingMap[y, x] = new Random().Next() % 2;
                 }
             }
 
