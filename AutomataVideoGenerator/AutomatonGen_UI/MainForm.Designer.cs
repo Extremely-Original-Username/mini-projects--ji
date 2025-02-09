@@ -51,7 +51,7 @@
             // 
             // DisplayImageBox
             // 
-            DisplayImageBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            DisplayImageBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             DisplayImageBox.Location = new Point(12, 12);
             DisplayImageBox.Name = "DisplayImageBox";
             DisplayImageBox.Size = new Size(520, 520);
