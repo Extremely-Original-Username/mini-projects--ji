@@ -39,7 +39,7 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
         };
 
 
-        public GenericBSN(int width, int height, int neighborhoodSize, string ruleString) : base(width, height)
+        public GenericBSN(int width, int height, int scale, int neighborhoodSize, string ruleString) : base(width, height, scale)
         {
             this.neighborhoodSize = neighborhoodSize;
 
@@ -48,7 +48,7 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
             setRandom();
         }
 
-        public GenericBSN(int width, int height, defaults ruleSet) : base(width, height)
+        public GenericBSN(int width, int height, int scale, defaults ruleSet) : base(width, height, scale)
         {
             var v = defaultsRuleSets[ruleSet];
 

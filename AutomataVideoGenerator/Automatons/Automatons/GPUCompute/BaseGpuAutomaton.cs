@@ -13,18 +13,16 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
     public abstract partial class BaseGpuAutomaton : iAutomaton, IDisposable
     {
         protected ReadWriteTexture2D<int> texture;
+        private int scale;
 
-        public BaseGpuAutomaton(int width, int height)
+        public BaseGpuAutomaton(int width, int height, int scale)
         {
+            this.scale = scale;
+
             texture = GraphicsDevice.GetDefault().AllocateReadWriteTexture2D<int>(width, height);
         }
 
         public Bitmap getImage()
-        {
-            return getImage(1);
-        }
-
-        public Bitmap getImage(int scale)
         {
             int buffer = 1;
 
@@ -81,7 +79,7 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
             {
                 Console.SetCursorPosition(0, 0);
                 Console.WriteLine("Processing: " + i + "                  ");
-                getImage(scale).Save(savePath + "/" + i + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+                getImage().Save(savePath + "/" + i + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
                 update();
             }
         }

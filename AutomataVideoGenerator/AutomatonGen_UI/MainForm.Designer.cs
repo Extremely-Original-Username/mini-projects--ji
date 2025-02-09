@@ -30,6 +30,9 @@
         {
             DisplayImageBox = new PictureBox();
             ToolPanel = new Panel();
+            panel1 = new Panel();
+            ScaleControl = new NumericUpDown();
+            ScaleLabel = new Label();
             HeightPanel = new Panel();
             HeightControl = new NumericUpDown();
             HeightLabel = new Label();
@@ -42,6 +45,8 @@
             StartStopButton = new Button();
             ((System.ComponentModel.ISupportInitialize)DisplayImageBox).BeginInit();
             ToolPanel.SuspendLayout();
+            panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)ScaleControl).BeginInit();
             HeightPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)HeightControl).BeginInit();
             WidthPanel.SuspendLayout();
@@ -62,6 +67,7 @@
             // ToolPanel
             // 
             ToolPanel.BackColor = SystemColors.ControlLight;
+            ToolPanel.Controls.Add(panel1);
             ToolPanel.Controls.Add(HeightPanel);
             ToolPanel.Controls.Add(WidthPanel);
             ToolPanel.Controls.Add(ModelPanel);
@@ -72,6 +78,35 @@
             ToolPanel.Name = "ToolPanel";
             ToolPanel.Size = new Size(340, 544);
             ToolPanel.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(ScaleControl);
+            panel1.Controls.Add(ScaleLabel);
+            panel1.Location = new Point(6, 106);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(159, 41);
+            panel1.TabIndex = 5;
+            // 
+            // ScaleControl
+            // 
+            ScaleControl.Location = new Point(62, 6);
+            ScaleControl.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            ScaleControl.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            ScaleControl.Name = "ScaleControl";
+            ScaleControl.Size = new Size(88, 31);
+            ScaleControl.TabIndex = 2;
+            ScaleControl.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            ScaleControl.ValueChanged += ScaleControl_ValueChanged;
+            // 
+            // ScaleLabel
+            // 
+            ScaleLabel.AutoSize = true;
+            ScaleLabel.Location = new Point(3, 8);
+            ScaleLabel.Name = "ScaleLabel";
+            ScaleLabel.Size = new Size(56, 25);
+            ScaleLabel.TabIndex = 1;
+            ScaleLabel.Text = "Scale:";
             // 
             // HeightPanel
             // 
@@ -85,6 +120,7 @@
             // HeightControl
             // 
             HeightControl.Location = new Point(68, 6);
+            HeightControl.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
             HeightControl.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
             HeightControl.Name = "HeightControl";
             HeightControl.Size = new Size(88, 31);
@@ -113,7 +149,8 @@
             // WidthControl
             // 
             WidthControl.Location = new Point(62, 6);
-            WidthControl.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            WidthControl.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            WidthControl.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             WidthControl.Name = "WidthControl";
             WidthControl.Size = new Size(88, 31);
             WidthControl.TabIndex = 2;
@@ -180,6 +217,9 @@
             Text = "MainForm";
             ((System.ComponentModel.ISupportInitialize)DisplayImageBox).EndInit();
             ToolPanel.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)ScaleControl).EndInit();
             HeightPanel.ResumeLayout(false);
             HeightPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)HeightControl).EndInit();
@@ -205,5 +245,8 @@
         private Panel HeightPanel;
         private NumericUpDown HeightControl;
         private Label HeightLabel;
+        private Panel panel1;
+        private NumericUpDown ScaleControl;
+        private Label ScaleLabel;
     }
 }

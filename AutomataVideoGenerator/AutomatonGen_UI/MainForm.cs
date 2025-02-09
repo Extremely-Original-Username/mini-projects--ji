@@ -20,7 +20,7 @@ namespace AutomatonGen_UI
 
         public MainForm()
         {
-            automaton = new GenericBSN(40, 40, GenericBSN.defaults.GameOfLife);
+            automaton = new GenericBSN(40, 40, 10, GenericBSN.defaults.GameOfLife);
             timer = new System.Windows.Forms.Timer();
             timer.Tick += new EventHandler(update);
 
@@ -43,7 +43,7 @@ namespace AutomatonGen_UI
                 image.Dispose();
             }
 
-            image = automaton.getImage(10);
+            image = automaton.getImage();
             DisplayImageBox.Image = image;
         }
 
@@ -52,8 +52,8 @@ namespace AutomatonGen_UI
             timer.Stop();
 
             automaton.Dispose();
-            automaton = new GenericBSN(int.Parse(WidthControl.Value.ToString()), int.Parse(HeightControl.Value.ToString()), (GenericBSN.defaults)ModelListBox.SelectedIndex); //Cast enmum from int
-            
+            automaton = new GenericBSN(int.Parse(WidthControl.Value.ToString()), int.Parse(HeightControl.Value.ToString()), int.Parse(ScaleControl.Value.ToString()), (GenericBSN.defaults)ModelListBox.SelectedIndex); //Cast enmum from int
+
             reDrawMainImage();
         }
 
@@ -81,6 +81,11 @@ namespace AutomatonGen_UI
         }
 
         private void HeightControl_ValueChanged(object sender, EventArgs e)
+        {
+            resetAutomaton();
+        }
+
+        private void ScaleControl_ValueChanged(object sender, EventArgs e)
         {
             resetAutomaton();
         }
