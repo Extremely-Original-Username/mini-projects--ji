@@ -26,21 +26,33 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
 
         public Bitmap getImage(int scale)
         {
+            int buffer = 1;
+
             int[,] textureArray = texture.ToArray();
-            Bitmap bitmap = new Bitmap(texture.Width, texture.Height);
+            Bitmap bitmap = new Bitmap(texture.Width + buffer * 2, texture.Height + buffer * 2);
 
             for (int y = 0; y < bitmap.Height; y++)
             {
                 for (int x = 0; x < bitmap.Width; x++)
                 {
-                    var pixel = textureArray[y, x]; //This must be flipped as the texture stores the width/height the wrong way around
-                    if (pixel == 1)
+                    if (
+                        y - buffer >= 0 && y - buffer < textureArray.GetLength(0) &&
+                        x - buffer >= 0 && x - buffer < textureArray.GetLength(1)
+                        )
                     {
-                        bitmap.SetPixel(x, y, Color.White);
+                        var pixel = textureArray[y - buffer, x - buffer]; //This must be flipped as the texture stores the width/height the wrong way around
+                        if (pixel == 1)
+                        {
+                            bitmap.SetPixel(x, y, Color.White);
+                        }
+                        else
+                        {
+                            bitmap.SetPixel(x, y, Color.Black);
+                        }
                     }
                     else
                     {
-                        bitmap.SetPixel(x, y, Color.Black);
+                        bitmap.SetPixel(x, y, Color.Gray);
                     }
                 }
             }
