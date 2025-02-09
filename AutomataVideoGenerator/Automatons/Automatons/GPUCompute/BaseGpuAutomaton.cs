@@ -29,11 +29,11 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
             int[,] textureArray = texture.ToArray();
             Bitmap bitmap = new Bitmap(texture.Width, texture.Height);
 
-            for (int y = 0; y < texture.Height; y++)
+            for (int y = 0; y < bitmap.Height; y++)
             {
-                for (int x = 0; x < texture.Width; x++)
+                for (int x = 0; x < bitmap.Width; x++)
                 {
-                    var pixel = textureArray[x, y];
+                    var pixel = textureArray[y, x]; //This must be flipped as the texture stores the width/height the wrong way around
                     if (pixel == 1)
                     {
                         bitmap.SetPixel(x, y, Color.White);
