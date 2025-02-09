@@ -38,6 +38,11 @@ namespace AutomatonGen_UI
 
         private void reDrawMainImage()
         {
+            if (image != null)
+            {
+                image.Dispose();
+            }
+
             image = automaton.getImage(10);
             DisplayImageBox.Image = image;
         }
@@ -46,7 +51,9 @@ namespace AutomatonGen_UI
         {
             timer.Stop();
 
+            automaton.Dispose();
             automaton = new GenericBSN(int.Parse(WidthControl.Value.ToString()), int.Parse(HeightControl.Value.ToString()), (GenericBSN.defaults)ModelListBox.SelectedIndex); //Cast enmum from int
+            
             reDrawMainImage();
         }
 

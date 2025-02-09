@@ -10,7 +10,7 @@ using ComputeSharp;
 
 namespace AutomataVideoGenerator.Automatons.GPUCompute
 {
-    public abstract partial class BaseGpuAutomaton : iAutomaton
+    public abstract partial class BaseGpuAutomaton : iAutomaton, IDisposable
     {
         protected ReadWriteTexture2D<int> texture;
 
@@ -97,6 +97,8 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
 
             GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new
                 Set(texture, initial));
+
+            initial.Dispose();
         }
 
         [AutoConstructor]
@@ -109,6 +111,11 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
             {
                 buffer[ThreadIds.XY] = source[ThreadIds.XY];
             }
+        }
+
+        public void Dispose()
+        {
+            this.texture.Dispose();
         }
     }
 }

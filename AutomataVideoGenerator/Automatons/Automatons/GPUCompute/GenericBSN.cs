@@ -134,6 +134,8 @@ namespace AutomataVideoGenerator.Automatons.GPUCompute
                 GraphicsDevice.GetDefault().For(texture.Width, texture.Height, new
                     StepLarger(texture, neighborGrid, live, dead, bornMin, bornMax, surviveMin, surviveMax));
             }
+
+            neighborGrid.Dispose();
         }
 
         [AutoConstructor]
